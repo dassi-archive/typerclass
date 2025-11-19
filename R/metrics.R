@@ -1,0 +1,234 @@
+# ------------------------------------------------------------------------------
+# Metrics funcions
+# ------------------------------------------------------------------------------
+
+
+# Number of Unique Values ------------------------------------------------------
+compute_n_unique_values <- function(var) {
+  non_na <- var[!is.na(var)]
+  length(unique(non_na))
+}
+
+
+# Standard Deviation -----------------------------------------------------------
+compute_std_dev <- function(var) {
+  non_na <- var[!is.na(var)]
+  if ((is.numeric(non_na) && length(non_na) > 1)) {
+    sd(non_na)
+  } else {
+    NA_real_
+  }  
+}
+
+
+# Maximum Relative Frequency --------------------------------------------------
+compute_max_relative_frequency <- function(var) {
+  non_na <- var[!is.na(var)]
+  
+  if (length(non_na) == 0) {
+    return(NA_real_)
+  }
+  
+  counts <- table(non_na)
+  max(counts) / length(non_na)
+}
+
+
+# Normalized Entropy ---------------------------------------------------------
+compute_norm_entropy <- function(var) {
+  safe_log <- function(z) {
+    z[z <= 0] <- 1e-12; log(z)
+  }
+  
+  non_na <- var[!is.na(var)]
+  counts <- table(non_na)
+  probs <- if (sum(counts) > 0) counts / sum(counts) else numeric(0)
+  if (length(probs) <= 1) return(0)
+  -sum(probs * safe_log(probs)) / log(length(probs))
+}
+
+
+# Minimum Value --------------------------------------------------------------
+compute_min_value <- function(var) {
+  non_na <- var[!is.na(var)]
+  if (is.numeric(non_na) && length(non_na) > 0) {
+   return(min(non_na))
+  } else {
+    return(NA)
+  }
+}
+
+# Maximum Value --------------------------------------------------------------
+compute_max_value <- function(var) {
+  non_na <- var[!is.na(var)]
+  if (is.numeric(non_na) && length(non_na) > 0) {
+    return(max(non_na))
+  } else {
+    return(NA)
+  }
+}
+
+
+# Is Character Variable ------------------------------------------------------
+compute_is_character <- function(var) {
+  is.character(var)
+}
+
+# Label Coverage -------------------------------------------------------------
+compute_label_cover <- function(var, var_name = NULL, labels_df = NULL) {
+  non_na <- var[!is.na(var)]
+  if (is.null(labels_df) || is.null(var_name)) {
+    return(NA_real_)
+  }
+  
+  labels_var <- labels_df |>
+    dplyr::filter(var == var_name & value != ">")
+  
+  if (length(non_na) == 0) {
+    return(NA_real_)
+  }
+  
+  df_values <- data.frame(
+    var = var_name,
+    value = unique(non_na),
+    stringsAsFactors = FALSE
+  )
+  merged <- merge(df_values, labels_var, by = c("var", "value"), all.x = TRUE)
+  
+  sum(!is.na(merged$label)) / nrow(merged)
+}
+
+
+# Shannon Entropy ------------------------------------------------------------
+compute_shannon_entropy <- function(var) {
+  safe_log <- function(z) { z[z <= 0] <- 1e-12; log(z) }
+  
+  non_na <- var[!is.na(var)]
+  counts <- table(non_na)
+  probs <- if (sum(counts) > 0) counts / sum(counts) else numeric(0)
+  if (length(probs) == 0) {
+    return(NA_real_)
+  }
+  
+  -sum(probs * safe_log(probs))
+}
+
+# Simpson Index (1 - sum p^2) ------------------------------------------------
+compute_simpson_index <- function(var) {
+  non_na <- var[!is.na(var)]
+  counts <- table(non_na)
+  probs <- if (sum(counts) > 0) counts / sum(counts) else numeric(0)
+  if (length(probs) == 0) {
+    return(NA_real_)
+  }
+
+  1 - sum(probs^2)
+}
+
+
+# Skewness of probabilities --------------------------------------------------
+compute_skewness_probs <- function(var) {
+  non_na <- var[!is.na(var)]
+  counts <- table(non_na)
+  probs <- if (sum(counts) > 0) counts / sum(counts) else numeric(0)
+
+  if (length(probs) <= 2) {
+    return(0)
+  }
+  m <- mean(probs)
+  s <- stats::sd(probs)
+  if (!is.finite(s) || s == 0) {
+    return(0)
+  }
+  z <- (probs - m) / s
+  mean(z^3)
+}
+
+
+# Kurtosis of probabilities (excess) -----------------------------------------
+compute_kurtosis_probs <- function(var) {
+  non_na <- var[!is.na(var)]
+  counts <- table(non_na)
+  probs <- if (sum(counts) > 0) counts / sum(counts) else numeric(0)
+  
+  if (length(probs) <= 2) {
+    return(0)
+  }
+
+  m <- mean(probs)
+  s <- stats::sd(probs)
+
+  if (!is.finite(s) || s == 0) {
+    return(0)
+  }
+  
+  z <- (probs - m) / s
+  mean(z^4) - 3
+}
+
+
+# Dispersion Index = Var / Mean ----------------------------------------------
+compute_dispersion_index <- function(var) {
+  non_na <- var[!is.na(var)]
+  counts <- table(non_na)
+  probs <- if (sum(counts) > 0) counts / sum(counts) else numeric(0)
+  if (length(probs) == 0) {
+    return(NA_real_)
+  }
+
+  stats::var(probs) / mean(probs)
+}
+
+
+# Uniformity = Shannon / log(n_unique) ---------------------------------------
+compute_uniformity <- function(var) {
+  H <- compute_shannon_entropy(var)
+  non_na <- var[!is.na(var)]
+  n_unique <- length(unique(non_na))
+  if (n_unique <= 1) {
+    return(0)
+  }
+
+  H / log(n_unique)
+}
+
+
+# Top-k Ratios -----------------------------------------------------------------
+compute_topk_ratio <- function(var, topk) {
+  non_na <- var[!is.na(var)]
+  counts <- table(non_na)
+  probs <- if (sum(counts) > 0) counts / sum(counts) else numeric(0)
+  
+  if (length(probs) == 0) {
+    return(setNames(rep(NA_real_, length(topk)), paste0("top", topk, "_ratio")))
+  }
+
+  p_sorted <- sort(probs, decreasing = TRUE)
+  ratio <- sum(p_sorted[seq_len(min(topk, length(p_sorted)))])
+
+  # ratios <- vapply(
+  #   topk,
+  #   function(k) sum(p_sorted[seq_len(min(k, length(p_sorted)))]), numeric(1)
+  # )
+  # names(ratios) <- paste0("top", topk, "_ratio")
+  # ratios
+}
+
+compute_top2_ratio <- function(var) {
+  compute_topk_ratio(var, topk = 2)
+}
+
+compute_top3_ratio <- function(var) {
+  compute_topk_ratio(var, topk = 3)
+}
+
+
+# Range Value ----------------------------------------------------------------
+compute_range_value <- function(var) {
+  non_na <- var[!is.na(var)]
+  if (is.numeric(non_na) && length(non_na) > 1) {
+    max(non_na) - min(non_na)
+  } else {
+    NA_real_
+  }
+}
