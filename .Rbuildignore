@@ -2,3 +2,4 @@
 ^renv\.lock$
 ^typerclass\.Rproj$
 ^\.Rproj\.user$
+^codecov\.yml$
