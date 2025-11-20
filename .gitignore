@@ -7,3 +7,6 @@
 
 # CSV files
 *.csv
+
+# VSCode settings
+.vscode/
