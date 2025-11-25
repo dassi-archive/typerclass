@@ -4,7 +4,6 @@
 
 # Number of Unique Values ------------------------------------------------------
 compute_n_unique_values <- function(var, var_name) {
-
   check_numeric(
     var = var,
     var_name = var_name,
@@ -17,7 +16,6 @@ compute_n_unique_values <- function(var, var_name) {
 
 # Standard Deviation -----------------------------------------------------------
 compute_std_dev <- function(var, var_name) {
-
   check_numeric(
     var = var,
     var_name = var_name,
@@ -25,7 +23,9 @@ compute_std_dev <- function(var, var_name) {
   )
 
   non_na <- var[!is.na(var)]
-  if (length(non_na) <= 1) return(NA_real_)
+  if (length(non_na) <= 1) {
+    return(NA_real_)
+  }
   sd(non_na)
 }
 
@@ -48,7 +48,6 @@ compute_max_relative_frequency <- function(var, var_name) {
 }
 # Normalized Entropy ---------------------------------------------------------
 compute_norm_entropy <- function(var, var_name) {
-
   check_numeric(
     var = var,
     var_name = var_name,
@@ -64,7 +63,9 @@ compute_norm_entropy <- function(var, var_name) {
   counts <- table(non_na)
   probs <- if (sum(counts) > 0) counts / sum(counts) else numeric(0)
 
-  if (length(probs) <= 1) return(0)
+  if (length(probs) <= 1) {
+    return(0)
+  }
 
   -sum(probs * safe_log(probs)) / log(length(probs))
 }
@@ -72,7 +73,6 @@ compute_norm_entropy <- function(var, var_name) {
 
 # Minimum Value --------------------------------------------------------------
 compute_min_value <- function(var, var_name) {
-
   check_numeric(
     var = var,
     var_name = var_name,
@@ -80,7 +80,9 @@ compute_min_value <- function(var, var_name) {
   )
 
   non_na <- var[!is.na(var)]
-  if (length(non_na) == 0) return(NA_real_)
+  if (length(non_na) == 0) {
+    return(NA_real_)
+  }
 
   min(non_na)
 }
@@ -88,7 +90,6 @@ compute_min_value <- function(var, var_name) {
 
 # Maximum Value --------------------------------------------------------------
 compute_max_value <- function(var, var_name) {
-
   check_numeric(
     var = var,
     var_name = var_name,
@@ -96,7 +97,9 @@ compute_max_value <- function(var, var_name) {
   )
 
   non_na <- var[!is.na(var)]
-  if (length(non_na) == 0) return(NA_real_)
+  if (length(non_na) == 0) {
+    return(NA_real_)
+  }
 
   max(non_na)
 }
@@ -109,7 +112,6 @@ compute_is_character <- function(var, var_name) {
 
 # Label Coverage -------------------------------------------------------------
 compute_label_cover <- function(var, var_name, labels_df = NULL) {
-
   non_na <- var[!is.na(var)]
 
   if (is.null(labels_df) || is.null(var_name)) {
@@ -135,7 +137,6 @@ compute_label_cover <- function(var, var_name, labels_df = NULL) {
 }
 # Shannon Entropy ------------------------------------------------------------
 compute_shannon_entropy <- function(var, var_name) {
-
   check_numeric(
     var = var,
     var_name = var_name,
@@ -143,14 +144,17 @@ compute_shannon_entropy <- function(var, var_name) {
   )
 
   safe_log <- function(z) {
-    z[z <= 0] <- 1e-12; log(z)
+    z[z <= 0] <- 1e-12
+    log(z)
   }
 
   non_na <- var[!is.na(var)]
   counts <- table(non_na)
   probs <- if (sum(counts) > 0) counts / sum(counts) else numeric(0)
 
-  if (length(probs) == 0) return(NA_real_)
+  if (length(probs) == 0) {
+    return(NA_real_)
+  }
 
   -sum(probs * safe_log(probs))
 }
@@ -158,7 +162,6 @@ compute_shannon_entropy <- function(var, var_name) {
 
 # Simpson Index --------------------------------------------------------------
 compute_simpson_index <- function(var, var_name) {
-
   check_numeric(
     var = var,
     var_name = var_name,
@@ -169,7 +172,9 @@ compute_simpson_index <- function(var, var_name) {
   counts <- table(non_na)
   probs <- if (sum(counts) > 0) counts / sum(counts) else numeric(0)
 
-  if (length(probs) == 0) return(NA_real_)
+  if (length(probs) == 0) {
+    return(NA_real_)
+  }
 
   1 - sum(probs^2)
 }
@@ -177,7 +182,6 @@ compute_simpson_index <- function(var, var_name) {
 
 # Skewness of probabilities --------------------------------------------------
 compute_skewness_probs <- function(var, var_name) {
-
   check_numeric(
     var = var,
     var_name = var_name,
@@ -188,12 +192,16 @@ compute_skewness_probs <- function(var, var_name) {
   counts <- table(non_na)
   probs <- if (sum(counts) > 0) counts / sum(counts) else numeric(0)
 
-  if (length(probs) <= 2) return(0)
+  if (length(probs) <= 2) {
+    return(0)
+  }
 
   m <- mean(probs)
   s <- stats::sd(probs)
 
-  if (!is.finite(s) || s == 0) return(0)
+  if (!is.finite(s) || s == 0) {
+    return(0)
+  }
 
   z <- (probs - m) / s
   mean(z^3)
@@ -202,7 +210,6 @@ compute_skewness_probs <- function(var, var_name) {
 
 # Kurtosis of probabilities (excess) -----------------------------------------
 compute_kurtosis_probs <- function(var, var_name) {
-
   check_numeric(
     var = var,
     var_name = var_name,
@@ -213,12 +220,16 @@ compute_kurtosis_probs <- function(var, var_name) {
   counts <- table(non_na)
   probs <- if (sum(counts) > 0) counts / sum(counts) else numeric(0)
 
-  if (length(probs) <= 2) return(0)
+  if (length(probs) <= 2) {
+    return(0)
+  }
 
   m <- mean(probs)
   s <- stats::sd(probs)
 
-  if (!is.finite(s) || s == 0) return(0)
+  if (!is.finite(s) || s == 0) {
+    return(0)
+  }
 
   z <- (probs - m) / s
   mean(z^4) - 3
@@ -227,7 +238,6 @@ compute_kurtosis_probs <- function(var, var_name) {
 
 # Dispersion Index = Var / Mean ----------------------------------------------
 compute_dispersion_index <- function(var, var_name) {
-
   check_numeric(
     var = var,
     var_name = var_name,
@@ -238,7 +248,9 @@ compute_dispersion_index <- function(var, var_name) {
   counts <- table(non_na)
   probs <- if (sum(counts) > 0) counts / sum(counts) else numeric(0)
 
-  if (length(probs) == 0) return(NA_real_)
+  if (length(probs) == 0) {
+    return(NA_real_)
+  }
 
   stats::var(probs) / mean(probs)
 }
@@ -246,7 +258,6 @@ compute_dispersion_index <- function(var, var_name) {
 
 # Uniformity = Shannon / log(n_unique) ---------------------------------------
 compute_uniformity <- function(var, var_name) {
-
   check_numeric(
     var = var,
     var_name = var_name,
@@ -258,7 +269,9 @@ compute_uniformity <- function(var, var_name) {
   non_na <- var[!is.na(var)]
   n_unique <- length(unique(non_na))
 
-  if (n_unique <= 1) return(0)
+  if (n_unique <= 1) {
+    return(0)
+  }
 
   h / log(n_unique)
 }
@@ -266,7 +279,6 @@ compute_uniformity <- function(var, var_name) {
 
 # Top-k Ratios -----------------------------------------------------------------
 compute_topk_ratio <- function(var, topk, var_name) {
-
   check_numeric(
     var = var,
     var_name = var_name,
@@ -275,7 +287,7 @@ compute_topk_ratio <- function(var, topk, var_name) {
 
   non_na <- var[!is.na(var)]
   counts <- table(non_na)
-  probs  <- if (sum(counts) > 0) counts / sum(counts) else numeric(0)
+  probs <- if (sum(counts) > 0) counts / sum(counts) else numeric(0)
 
   out_name <- paste0("top", topk, "_ratio")
 
@@ -300,7 +312,6 @@ compute_top3_ratio <- function(var, var_name) {
 
 # Range Value ----------------------------------------------------------------
 compute_range_value <- function(var, var_name) {
-
   check_numeric(
     var = var,
     var_name = var_name,
@@ -309,7 +320,9 @@ compute_range_value <- function(var, var_name) {
 
   non_na <- var[!is.na(var)]
 
-  if (length(non_na) <= 1) return(NA_real_)
+  if (length(non_na) <= 1) {
+    return(NA_real_)
+  }
 
   max(non_na) - min(non_na)
 }

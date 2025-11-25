@@ -3,3 +3,6 @@
 ^typerclass\.Rproj$
 ^\.Rproj\.user$
 ^codecov\.yml$
+^[.]?air[.]toml$
+^\.vscode$
+^\.github$
