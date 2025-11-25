@@ -253,14 +253,14 @@ compute_uniformity <- function(var, var_name) {
     metric_name = "compute_uniformity"
   )
 
-  H <- compute_shannon_entropy(var, var_name)
+  h <- compute_shannon_entropy(var, var_name)
 
   non_na <- var[!is.na(var)]
   n_unique <- length(unique(non_na))
 
   if (n_unique <= 1) return(0)
 
-  H / log(n_unique)
+  h / log(n_unique)
 }
 
 
