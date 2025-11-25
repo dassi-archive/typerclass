@@ -6,31 +6,31 @@
 # select_metrics() -------------------------------------------------------------
 select_metrics <- function() {
   c(
-    "compute_n_unique_values", 
-    "compute_std_dev",
-    "compute_max_relative_frequency",
-    "compute_norm_entropy",
-    "compute_min_value",
-    "compute_max_value",
-    "compute_range_value",
-    "compute_is_character",
-    "compute_shannon_entropy",
-  #  "compute_label_coverage",
-    "compute_simpson_index",
-    "compute_skewness_probs",
-    "compute_kurtosis_probs",
-    "compute_dispersion_index",
-    "compute_uniformity",
-    "compute_top2_ratio",
-    "compute_top3_ratio",
-    "compute_range_value"
+  #   "compute_n_unique_values",
+    "compute_std_dev"
+  #   "compute_max_relative_frequency",
+  #   "compute_norm_entropy",
+  #   "compute_min_value",
+  #   "compute_max_value",
+  #   "compute_range_value",
+  #   "compute_is_character",
+  #   "compute_shannon_entropy",
+  # #  "compute_label_coverage",
+  #   "compute_simpson_index",
+  #   "compute_skewness_probs",
+  #   "compute_kurtosis_probs",
+  #   "compute_dispersion_index",
+  #   "compute_uniformity",
+  #   "compute_top2_ratio",
+  #   "compute_top3_ratio",
+  #   "compute_range_value"
   )
 }
 
 
 # compute_var_metrics() --------------------------------------------------------
 compute_var_metrics <- function(var, var_name, metrics) {
-  results <- purrr::map(metrics, ~ get(.x)(var))
+  results <- purrr::map(metrics, ~ get(.x)(var, var_name))
   names(results) <- metrics
 
   results
@@ -79,29 +79,32 @@ compute_var_metrics <- function(var, var_name, metrics) {
   
 dataset_metrics <- function(data, labels_df = NULL) {
   
+  metrics_list <- select_metrics()  # lista delle metriche
+
   df_metrics <- purrr::map_dfr(names(data), function(var_name) {
     
-    # --- Compute all metrics for this variable (without label_coverage) ---
-    metrics_list <- compute_selected_metrics(
+    # --- Compute all metrics for this variable ---
+    metrics_values <- compute_var_metrics(
       var = data[[var_name]],
-      var_name = var_name
+      var_name = var_name,
+      metrics = metrics_list
     )
     
     # --- Append variable name ---
-    metrics_list$variable <- var_name
+    metrics_values$variable <- var_name
     
     # --- Append type only if labels_df is provided ---
     if (!is.null(labels_df) && "type" %in% names(labels_df)) {
       tmp <- labels_df$type[labels_df$var == var_name]
-      if (length(tmp) > 0) metrics_list$type <- tmp[1]
+      if (length(tmp) > 0) metrics_values$type <- tmp[1]
     }
     
-    # --- Convert to data frame ---
-    as.data.frame(metrics_list)
+    as.data.frame(metrics_values)
   })
   
   return(df_metrics)
 }
+
 
 # ------------------------------
 # Function: Predict variable types for new data and return JSON
