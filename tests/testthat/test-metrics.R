@@ -1,6 +1,3 @@
-library(testthat)
-library(devtools)
-
 test_that("compute_n_unique_values works", {
   expect_equal(
     compute_n_unique_values(var_numeric, var_name = "var_numeric"),
