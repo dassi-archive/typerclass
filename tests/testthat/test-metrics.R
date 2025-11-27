@@ -352,12 +352,12 @@ test_that("compute_kurtosis_probs works", {
   )
 
   expect_equal(
-    compute_kurtosis_probs(c(5, 5, 5, 5), var_name = "all_equal"),
+    compute_kurtosis_probs(var_numeric_all_equal, var_name = "var_numeric_all_equal"),
     0
   )
 
-  expect_equal(
-    compute_kurtosis_probs(c(NA_real_, NA_real_), var_name = "all_na"),
+   expect_equal(
+    compute_kurtosis_probs(var_numeric_only_na, var_name = "all_na"),
     0
   )
 
@@ -557,4 +557,16 @@ test_that("compute_topk_ratio works", {
     compute_top2_ratio(var_na, var_name = "var_na"),
     regexp = "cannot be computed for 'var_na'"
   )
+})
+
+
+test_that("compute_label_cover works", {
+  labels_df <- data.frame(var = c("x","x","x"),
+    value = c("a","b",">"), label = c(1,2,3))
+  var1 <- c("a","b","a","c")
+
+  expect_equal(compute_label_cover(var1,"x",labels_df),2/3)
+  expect_equal(compute_label_cover(c(NA,NA),"x",labels_df),NA_real_)
+  expect_equal(compute_label_cover(var1,NULL,labels_df),NA_real_)
+  expect_equal(compute_label_cover(var1,"x",NULL),NA_real_)
 })
