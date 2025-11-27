@@ -1,7 +1,7 @@
 check_numeric <- function(var, var_name, metric_name) {
   if (is.null(var_name)) {
-    var_name <- deparse(substitute(var)) %>%
-      sub(".*\\$", "", x = .)
+    var_name <- deparse(substitute(var)) |>
+      sub(".*\\$", "", x = .data)
   }
 
   if (!is.numeric(var)) {
@@ -24,7 +24,7 @@ check_numeric <- function(var, var_name, metric_name) {
         "."
       )
     }
-    cli::cli_abort(msg, .envir = parent.frame())
+    cli_abort(msg, .envir = parent.frame())
   }
 
   TRUE

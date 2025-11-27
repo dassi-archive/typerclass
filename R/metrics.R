@@ -119,7 +119,7 @@ compute_label_cover <- function(var, var_name, labels_df = NULL) {
   }
 
   labels_var <- labels_df |>
-    dplyr::filter(var == var_name & value != ">")
+    filter(var == var_name & .data$value != ">")
 
   if (length(non_na) == 0) {
     return(NA_real_)
@@ -197,7 +197,7 @@ compute_skewness_probs <- function(var, var_name) {
   }
 
   m <- mean(probs)
-  s <- stats::sd(probs)
+  s <- sd(probs)
 
   if (!is.finite(s) || s == 0) {
     return(0)
@@ -225,7 +225,7 @@ compute_kurtosis_probs <- function(var, var_name) {
   }
 
   m <- mean(probs)
-  s <- stats::sd(probs)
+  s <- sd(probs)
 
   if (!is.finite(s) || s == 0) {
     return(0)
@@ -252,7 +252,7 @@ compute_dispersion_index <- function(var, var_name) {
     return(NA_real_)
   }
 
-  stats::var(probs) / mean(probs)
+  var(probs) / mean(probs)
 }
 
 

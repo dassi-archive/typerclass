@@ -29,7 +29,7 @@ select_metrics <- function() {
 
 # compute_var_metrics() --------------------------------------------------------
 compute_var_metrics <- function(var, var_name, metrics) {
-  results <- purrr::map(metrics, ~ get(.x)(var, var_name))
+  results <- map(metrics, ~ get(.x)(var, var_name))
   names(results) <- metrics
 
   results
@@ -78,7 +78,7 @@ compute_var_metrics <- function(var, var_name, metrics) {
 dataset_metrics <- function(data, labels_df = NULL) {
   metrics_list <- select_metrics() # lista delle metriche
 
-  df_metrics <- purrr::map_dfr(names(data), function(var_name) {
+  df_metrics <- map_dfr(names(data), function(var_name) {
     # --- Compute all metrics for this variable ---
     metrics_values <- compute_var_metrics(
       var = data[[var_name]],
@@ -153,5 +153,5 @@ predict_new_data_json <- function(model_fit, data) {
   )
 
   # ---- Convert to JSON ----
-  jsonlite::toJSON(preds_list, pretty = TRUE, auto_unbox = TRUE, na = "null")
+  toJSON(preds_list, pretty = TRUE, auto_unbox = TRUE, na = "null")
 }

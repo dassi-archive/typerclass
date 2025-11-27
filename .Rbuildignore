@@ -7,3 +7,4 @@
 ^\.vscode$
 ^\.github$
 ^check\.R$
+^inst/data$
