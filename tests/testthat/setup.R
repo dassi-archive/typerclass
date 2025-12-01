@@ -3,6 +3,7 @@ var_numeric <- c(1, 2, 2, 3, 4, 4, 4)
 var_numeric_with_na <- c(1, 2, NA, 2, 3, NA)
 var_numeric_all_equal <- c(7, 7, 7, 7)
 var_numeric_only_na <- c(NA_real_, NA_real_, NA_real_)
+numeric_empty <- numeric(0)
 
 # Character
 var_char_simple <- c("a", "b", "a", "c")

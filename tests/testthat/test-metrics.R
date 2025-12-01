@@ -352,11 +352,14 @@ test_that("compute_kurtosis_probs works", {
   )
 
   expect_equal(
-    compute_kurtosis_probs(var_numeric_all_equal, var_name = "var_numeric_all_equal"),
+    compute_kurtosis_probs(
+      var_numeric_all_equal,
+      var_name = "var_numeric_all_equal"
+    ),
     0
   )
 
-   expect_equal(
+  expect_equal(
     compute_kurtosis_probs(var_numeric_only_na, var_name = "all_na"),
     0
   )
@@ -391,11 +394,11 @@ test_that("compute_dispersion_index works", {
 })
 
 test_that("compute_uniformity works", {
-  H <- compute_shannon_entropy(var_numeric, var_name = "var_numeric")
+  h <- compute_shannon_entropy(var_numeric, var_name = "var_numeric")
   n_unique <- length(unique(var_numeric))
   expect_equal(
     compute_uniformity(var_numeric, var_name = "var_numeric"),
-    H / log(n_unique)
+    h / log(n_unique)
   )
 
   expect_equal(compute_uniformity(c(5), var_name = "single_value"), 0)
@@ -561,12 +564,25 @@ test_that("compute_topk_ratio works", {
 
 
 test_that("compute_label_cover works", {
-  labels_df <- data.frame(var = c("x","x","x"),
-    value = c("a","b",">"), label = c(1,2,3))
-  var1 <- c("a","b","a","c")
+  labels_df <- data.frame(
+    var = c("x", "x", "x"),
+    value = c("a", "b", ">"),
+    label = c(1, 2, 3)
+  )
+  var1 <- c("a", "b", "a", "c")
 
-  expect_equal(compute_label_cover(var1,"x",labels_df),2/3)
-  expect_equal(compute_label_cover(c(NA,NA),"x",labels_df),NA_real_)
-  expect_equal(compute_label_cover(var1,NULL,labels_df),NA_real_)
-  expect_equal(compute_label_cover(var1,"x",NULL),NA_real_)
+  expect_equal(compute_label_cover(var1, "x", labels_df), 2 / 3)
+  expect_equal(compute_label_cover(c(NA, NA), "x", labels_df), NA_real_)
+  expect_equal(compute_label_cover(var1, NULL, labels_df), NA_real_)
+  expect_equal(compute_label_cover(var1, "x", NULL), NA_real_)
+})
+
+
+test_that("functions handle empty numeric vectors", {
+  expect_equal(compute_n_unique_values(numeric_empty, "empty"), 0)
+  expect_identical(compute_std_dev(numeric_empty, "empty"), NA_real_)
+  expect_identical(compute_norm_entropy(numeric_empty, "empty"), 0)
+  expect_identical(compute_skewness_probs(numeric_empty, "empty"), 0)
+  expect_identical(compute_range_value(numeric_empty, "empty"), NA_real_)
+  expect_identical(compute_dispersion_index(numeric_empty, "empty"), NA_real_)
 })
