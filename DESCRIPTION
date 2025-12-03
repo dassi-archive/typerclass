@@ -32,11 +32,18 @@ Imports:
     rlang,
     stats
 Suggests: 
+    bundle,
     covr,
     DT,
+    gt,
     htmltool,
     htmltools,
-    testthat (>= 3.0.0)
+    patchwork,
+    ranger,
+    testthat (>= 3.0.0),
+    tidymodels,
+    tidyverse,
+    vip
 Config/testthat/edition: 3
 URL: https://github.com/dassi-archive/typerclass
 BugReports: https://github.com/dassi-archive/typerclass/issues
