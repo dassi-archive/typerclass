@@ -9,3 +9,4 @@
 ^check\.R$
 ^inst/data$
 ^data-raw$
+^_dev$

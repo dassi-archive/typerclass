@@ -25,7 +25,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Imports: 
     cli,
-    devtools,
     dplyr,
     jsonlite,
     purrr,
@@ -34,12 +33,11 @@ Imports:
 Suggests: 
     bundle,
     covr,
+    devtools,
     DT,
     gt,
-    htmltool,
     htmltools,
     patchwork,
-    purr,
     ranger,
     testthat (>= 3.0.0),
     tidymodels,
