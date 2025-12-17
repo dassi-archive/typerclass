@@ -7,7 +7,7 @@ compute_n_unique_values <- function(var, var_name) {
   check_numeric(
     var = var,
     var_name = var_name,
-    metric_name = "compute_n_unique_values"
+    metric_name = "n_unique_values"
   )
 
   non_na <- var[!is.na(var)]
@@ -19,7 +19,7 @@ compute_std_dev <- function(var, var_name) {
   check_numeric(
     var = var,
     var_name = var_name,
-    metric_name = "compute_std_dev"
+    metric_name = "std_dev"
   )
 
   non_na <- var[!is.na(var)]
@@ -34,7 +34,7 @@ compute_max_relative_frequency <- function(var, var_name) {
   check_numeric(
     var = var,
     var_name = var_name,
-    metric_name = "compute_max_relative_frequency"
+    metric_name = "max_relative_frequency"
   )
 
   non_na <- var[!is.na(var)]
@@ -51,7 +51,7 @@ compute_norm_entropy <- function(var, var_name) {
   check_numeric(
     var = var,
     var_name = var_name,
-    metric_name = "compute_norm_entropy"
+    metric_name = "norm_entropy"
   )
 
   safe_log <- function(z) {
@@ -76,7 +76,7 @@ compute_min_value <- function(var, var_name) {
   check_numeric(
     var = var,
     var_name = var_name,
-    metric_name = "compute_min_value"
+    metric_name = "min_value"
   )
 
   non_na <- var[!is.na(var)]
@@ -93,7 +93,7 @@ compute_max_value <- function(var, var_name) {
   check_numeric(
     var = var,
     var_name = var_name,
-    metric_name = "compute_max_value"
+    metric_name = "max_value"
   )
 
   non_na <- var[!is.na(var)]
@@ -140,7 +140,7 @@ compute_shannon_entropy <- function(var, var_name) {
   check_numeric(
     var = var,
     var_name = var_name,
-    metric_name = "compute_shannon_entropy"
+    metric_name = "shannon_entropy"
   )
 
   safe_log <- function(z) {
@@ -165,7 +165,7 @@ compute_simpson_index <- function(var, var_name) {
   check_numeric(
     var = var,
     var_name = var_name,
-    metric_name = "compute_simpson_index"
+    metric_name = "simpson_index"
   )
 
   non_na <- var[!is.na(var)]
@@ -185,7 +185,7 @@ compute_skewness_probs <- function(var, var_name) {
   check_numeric(
     var = var,
     var_name = var_name,
-    metric_name = "compute_skewness_probs"
+    metric_name = "skewness_probs"
   )
 
   non_na <- var[!is.na(var)]
@@ -213,7 +213,7 @@ compute_kurtosis_probs <- function(var, var_name) {
   check_numeric(
     var = var,
     var_name = var_name,
-    metric_name = "compute_kurtosis_probs"
+    metric_name = "kurtosis_probs"
   )
 
   non_na <- var[!is.na(var)]
@@ -241,7 +241,7 @@ compute_dispersion_index <- function(var, var_name) {
   check_numeric(
     var = var,
     var_name = var_name,
-    metric_name = "compute_dispersion_index"
+    metric_name = "dispersion_index"
   )
 
   non_na <- var[!is.na(var)]
@@ -256,24 +256,24 @@ compute_dispersion_index <- function(var, var_name) {
 }
 
 
-# Uniformity = Shannon / log(n_unique) ---------------------------------------
+# Uniformity = Shannon / log(n_unique_values) ---------------------------------------
 compute_uniformity <- function(var, var_name) {
   check_numeric(
     var = var,
     var_name = var_name,
-    metric_name = "compute_uniformity"
+    metric_name = "uniformity"
   )
 
   h <- compute_shannon_entropy(var, var_name)
 
   non_na <- var[!is.na(var)]
-  n_unique <- length(unique(non_na))
+  n_unique_values <- length(unique(non_na))
 
-  if (n_unique <= 1) {
+  if (n_unique_values <= 1) {
     return(0)
   }
 
-  h / log(n_unique)
+  h / log(n_unique_values)
 }
 
 
@@ -282,7 +282,7 @@ compute_topk_ratio <- function(var, topk, var_name) {
   check_numeric(
     var = var,
     var_name = var_name,
-    metric_name = "compute_topk_ratio"
+    metric_name = "topk_ratio"
   )
 
   non_na <- var[!is.na(var)]
@@ -315,7 +315,7 @@ compute_range_value <- function(var, var_name) {
   check_numeric(
     var = var,
     var_name = var_name,
-    metric_name = "compute_range_value"
+    metric_name = "range_value"
   )
 
   non_na <- var[!is.na(var)]
