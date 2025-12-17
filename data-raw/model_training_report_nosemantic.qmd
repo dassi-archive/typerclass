@@ -23,7 +23,7 @@ library(ranger)
 library(gt)
 library(vip)
 library(patchwork)
-#library(probably)
+# library(probably)
 library(bundle)
 
 source("metrics_report.R")
@@ -176,7 +176,7 @@ rec_none <- recipe(type ~ ., data = train_data) %>%
   update_role(dataset, variable, new_role = "info")
 
 # (B) Recipe with median imputation for all numeric predictors
-#rec_median <- recipe(type ~ ., data = train_data) %>%
+# rec_median <- recipe(type ~ ., data = train_data) %>%
 #  update_role(dataset, variable, new_role = "info") %>%
 #  step_impute_median(all_numeric_predictors())
 
@@ -253,6 +253,8 @@ rf_final_fit <- rf_final_wf %>%
 # Save final Random Forest workflow with fitted model
 
 rf_final_fit_bundled <- bundle(rf_final_fit)
+
+usethis::use_data(rf_final_fit, overwrite = TRUE, internal = TRUE)
 
 saveRDS(
   rf_final_fit_bundled,
@@ -434,7 +436,7 @@ final_results <- bind_rows(
 
 ```{r,eval=FALSE}
 
-#old
+# old
 
 # ---- Fit models with recipe without imputation ----
 
@@ -637,21 +639,21 @@ prob_cols <- paste0(".pred_", levels(rf_preds$type))
 
 # Compute multiclass ROC curves correctly (one-vs-all)
 
-#roc_rf <- roc_curve(rf_preds, truth = type, all_of(prob_cols)) %>%
+# roc_rf <- roc_curve(rf_preds, truth = type, all_of(prob_cols)) %>%
 #  mutate(model = "RF (impute)")
 
-#roc_xgb <- roc_curve(xgb_preds, truth = type, all_of(prob_cols)) %>%
+# roc_xgb <- roc_curve(xgb_preds, truth = type, all_of(prob_cols)) %>%
 #  mutate(model = "XGB (impute)")
 
-#roc_rf_none <- roc_curve(rf_none_preds, truth = type, all_of(prob_cols)) %>%
+# roc_rf_none <- roc_curve(rf_none_preds, truth = type, all_of(prob_cols)) %>%
 #  mutate(model = "RF (no impute)")
 
-#roc_xgb_none <- roc_curve(xgb_none_preds, truth = type, all_of(prob_cols)) %>%
+# roc_xgb_none <- roc_curve(xgb_none_preds, truth = type, all_of(prob_cols)) %>%
 #  mutate(model = "XGB (no impute)")
 
 # Combine for plotting
 
-#roc_all <- bind_rows(roc_rf, roc_xgb, roc_rf_none, roc_xgb_none)
+# roc_all <- bind_rows(roc_rf, roc_xgb, roc_rf_none, roc_xgb_none)
 
 ```
 
@@ -690,7 +692,7 @@ rf_final_fit |>
 
 ```{r, echo=FALSE}
 
-#Full predictions
+# Full predictions
 rf_full_fit <- rf_final_wf %>%
   fit(data = data)
 
@@ -818,7 +820,7 @@ mis <- rf_flag_full %>%
 
 ```{r rf_plots2, eval=FALSE }
 
-#fig.width=14, fig.height=10
+# fig.width=14, fig.height=10
 
 rf_N <- rf_flag_full %>% filter(type.x == "N")
 
@@ -938,7 +940,7 @@ na_summary <- data %>%
 
 ```{r,eval=FALSE}
 
-#rf_plots, fig.width=14, fig.height=20
+# rf_plots, fig.width=14, fig.height=20
 rf_flag_full %>%
   filter(type.x %in% c("N", "O")) %>%
   select(all_of(pred_vars), type.x) %>%

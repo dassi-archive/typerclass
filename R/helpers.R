@@ -5,31 +5,31 @@
 # select_metrics() -------------------------------------------------------------
 select_metrics <- function() {
   c(
-    #   "compute_n_unique_values",
-    "compute_std_dev"
-    #   "compute_max_relative_frequency",
-    #   "compute_norm_entropy",
-    #   "compute_min_value",
-    #   "compute_max_value",
-    #   "compute_range_value",
-    #   "compute_is_character",
-    #   "compute_shannon_entropy",
-    # #  "compute_label_coverage",
-    #   "compute_simpson_index",
-    #   "compute_skewness_probs",
-    #   "compute_kurtosis_probs",
-    #   "compute_dispersion_index",
-    #   "compute_uniformity",
-    #   "compute_top2_ratio",
-    #   "compute_top3_ratio",
-    #   "compute_range_value"
+    "n_unique_values",
+    "std_dev",
+    "max_relative_frequency",
+    "norm_entropy",
+    "min_value",
+    "max_value",
+    "range_value",
+    "is_character",
+    "shannon_entropy",
+    #  "label_coverage",
+    "simpson_index",
+    "skewness_probs",
+    "kurtosis_probs",
+    "dispersion_index",
+    "uniformity",
+    "top2_ratio",
+    "top3_ratio",
+    "range_value"
   )
 }
 
 
 # compute_var_metrics() --------------------------------------------------------
 compute_var_metrics <- function(var, var_name, metrics) {
-  results <- map(metrics, ~ get(.x)(var, var_name))
+  results <- map(metrics, ~ get(sprintf("compute_%s", .x))(var, var_name))
   names(results) <- metrics
 
   results
@@ -154,4 +154,33 @@ predict_new_data_json <- function(model_fit, data) {
 
   # ---- Convert to JSON ----
   toJSON(preds_list, pretty = TRUE, auto_unbox = TRUE, na = "null")
+}
+
+# ------------------------------
+# Function: Predict type
+# ------------------------------
+
+predict_type <- function(data) {
+  # ---- Compute variable-level metrics ----
+  metrics <- dataset_metrics(data)
+
+  # ---- Ensure 'dataset' column exists (model requirement) ----
+  if (!"dataset" %in% names(metrics)) {
+    metrics$dataset <- "dataset"
+  }
+
+  # ---- Class predictions ----
+  preds_class <- as_tibble(predict(rf_final_fit, metrics))
+
+  # ---- Probability predictions ----
+  preds_prob <- as_tibble(predict(rf_final_fit, metrics, type = "prob"))
+
+  # ---- Combine all results ----
+  out <- bind_cols(
+    tibble(variable = metrics$variable),
+    preds_class,
+    preds_prob
+  )
+
+  return(out)
 }
