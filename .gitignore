@@ -10,3 +10,5 @@
 
 # VSCode settings
 .vscode/
+
+/.quarto/
