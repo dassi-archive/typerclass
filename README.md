@@ -14,7 +14,7 @@ You can install the development version of typerclass from [GitHub](https://gith
 
 <!-- #TODO: update link github -->
 
-```
+```r
 # install.packages("typerclass")
 pak::pak("dassi-archive/typerclass")
 ```
@@ -52,10 +52,12 @@ predict_type(df)
 Typerclass includes a sample of the Italian Labour Force Survey (2013) dataset from Eurostat.
 
 The data are provided in:
+
 - `data-raw/lfs_it_2013.csv`: the dataset sample  
 - `data-raw/lfs_it_2013_labels.csv`: variable labels
 
 ```r
+
 library(typerclass)
 
 # Load the sample dataset
@@ -75,20 +77,36 @@ head(lfs)
 # Load variable labels
 labels <- read.csv("data-raw/lfs_it_2013_labels.csv")
 
-> labels <- labels %>%
-  dplyr::select(-missing ,- weight, -lang)
+# Inspect the labels
+labels
 
-# DISCUSS: togliamo missing lang e weight per semplicità?
-# DISCUSS: visto che così stamparla è impossibile perchè etichetta di hwactual è lunghissima, togliamo quella variabile per fare più pulito? 
-
-
+#    value      var                                                     label
+# 1      >  REFYEAR                                            Reference year
+# 2      >      SEX                                                       Sex
+# 3      1      SEX                                                      Male
+# 4      2      SEX                                                    Female
+# 5      >      AGE                                                       Age
+# 6      7      AGE                                                      0-14
+# 7     20      AGE                                                     15-24
+# 8     32      AGE                                                     25-39
+# 9     47      AGE                                                     40-54
+# 10    65      AGE                                                     55-74
+# 11    75      AGE                                                       75+
+# 12     >   STAPRO                                       Professional status
+# 13     0   STAPRO                   Self-employed with or without employees
+# 14     5   STAPRO                                 Employee or family worker
+# 15     9   STAPRO                                            Not applicable
+# 16     > HWACTUAL Number of hours actually worked during the reference week
+# 17     0 HWACTUAL        Employed persons not working during reference week
+# 18    99 HWACTUAL                                            Not applicable
+# 19     >    COEFF                                          Weighting factor
 
 
 # Predict variable measurement types
 type_predictions <- predict_type(lfs)
 
 # View results
-head(type_predictions)
+type_predictions
 
 # A tibble: 6 × 5
 #  variable .pred_class .pred_N .pred_O .pred_S
@@ -100,57 +118,24 @@ head(type_predictions)
 # 5 HWACTUAL S             0.121 0.0345   0.845 
 # 6 COEFF    S             0.306 0.300    0.394 
 
-#TODO: vogliamo aggiungere di matrice confusione?
+```
 
-# Join the tables using the correct column names
-comparison <- type_predictions %>%
-  dplyr::left_join(
-    labels %>% dplyr::select(var, type),
-    by = c("variable" = "var")
-  ) %>%
-  dplyr::rename(
-    original_type = type,
-    predicted_type = .pred_class
-  )
+### Notes on predictions
+Variable labels are not required by `typerclass` to generate predictions; they are included here only for illustrative purposes, to clarify how variables are defined and coded in the dataset.
 
-# Display the row-by-row comparison
-comparison
 
-# A tibble: 19 × 6
-#   variable predicted_type .pred_N .pred_O .pred_S original_type
-#   <chr>    <fct>            <dbl>   <dbl>   <dbl> <chr>        
-# 1 REFYEAR  S                0.245 0        0.755  S            
-# 2 SEX      N                0.998 0.00216  0      N            
-# 3 SEX      N                0.998 0.00216  0      N            
-# 4 SEX      N                0.998 0.00216  0      N            
-# 5 AGE      S                0.151 0.0841   0.765  O            
-# 6 AGE      S                0.151 0.0841   0.765  O            
-#7 AGE      S                0.151 0.0841   0.765  O            
-# 8 AGE      S                0.151 0.0841   0.765  O            
-# 9 AGE      S                0.151 0.0841   0.765  O            
-#10 AGE      S                0.151 0.0841   0.765  O            
-#11 AGE      S                0.151 0.0841   0.765  O            
-#12 STAPRO   N                0.644 0.272    0.0841 N            
-#13 STAPRO   N                0.644 0.272    0.0841 N            
-#14 STAPRO   N                0.644 0.272    0.0841 N            
-#15 STAPRO   N                0.644 0.272    0.0841 N            
-#16 HWACTUAL S                0.121 0.0345   0.845  N            
-#17 HWACTUAL S                0.121 0.0345   0.845  N            
-#18 HWACTUAL S                0.121 0.0345   0.845  N            
-#19 COEFF    S                0.306 0.300    0.394  S  
+The variable type predictions returned by `typerclass` are probabilistic and may not always be correct.  
+They should be interpreted together with survey metadata and substantive knowledge of the data.
+In practice, `typerclass` predictions should be used as a **support tool**, not as a substitute for careful data inspection and documentation.
 
-# Create the confusion matrix
-conf_matrix <- table(
-  comparison$original_type,
-  comparison$predicted_type
-)
 
-# Display the confusion matrix
+For example, **`AGE`** is predicted as *Scale*, but in this dataset it actually represents categorical age groups (e.g. 0–14, 15–24, 25–39).
 
-#  N O S
-#  N 7 0 3
-#  O 0 0 7
-#  S 0 0 2
+The method implemented in `typerclass` has been tested on official survey microdata, achieving good accuracy rates in most cases, but performance may vary depending on coding schemes and survey design.
 
-  ```
 
+<!-- #TODO: add reference to article when published ("For details on the evaluation and accuracy of the approach, see:  
+ *[Author(s), Year]* — *Title of the article* (link to be added)
+") -->
+
+<!-- DISCUSS: alla fine nel dataset di partenza non ci sono altre variabili quindi ho lasciato HWACTUAL . non so però se si capisce dalle etichette che oltre ai valori presenti ci sono il numero delle ore non etichettate. valutiamo se invece che print del file etichette (e forse delle etichette proprio caricate) ha senso spiegare le variabili in altro modo. -->
