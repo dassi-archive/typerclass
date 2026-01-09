@@ -37,9 +37,9 @@ compute_var_metrics <- function(var, var_name, metrics) {
 
 # dataset_metrics() ------------------------------------------------------------
 dataset_metrics <- function(data, labels_df = NULL) {
-  metrics_list <- select_metrics() # lista delle metriche
+  metrics_list <- select_metrics() # metrics list
 
-  df_metrics <- map_dfr(names(data), function(var_name) {
+  df_metrics <- map_dfr(unname(names(data)), function(var_name) {
     # --- Compute all metrics for this variable ---
     metrics_values <- compute_var_metrics(
       var = data[[var_name]],
@@ -56,15 +56,16 @@ dataset_metrics <- function(data, labels_df = NULL) {
       if (length(tmp) > 0) metrics_values$type <- tmp[1]
     }
 
-    as.data.frame(metrics_values)
+    as.data.frame(metrics_values, row.names = NULL)
   })
 
   df_metrics <- dplyr::select(
     df_metrics,
-    .data$variable,
+    variable,
     dplyr::everything()
   )
-  rownames(df_metrics) <- NULL
+
+  df_metrics <- dplyr::as_tibble(df_metrics, .name_repair = "minimal")
 
   return(df_metrics)
 }

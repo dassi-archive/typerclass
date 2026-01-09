@@ -15,5 +15,6 @@
 #' @importFrom stats predict
 #' @importFrom stats sd
 #' @importFrom stats setNames
+#' @import workflows
 ## usethis namespace: end
 NULL

@@ -13,6 +13,7 @@ results <- compute_var_metrics(
 )
 
 # Run tests
+
 devtools::test()
 
 covr::report()
