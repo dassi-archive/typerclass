@@ -14,6 +14,8 @@ test_that("compute_var_metrics returns a named list", {
   expect_equal(names(results), metrics)
 
   expect_true(all(!sapply(results, is.null)))
+
+  expect_true(all(sapply(results, is.numeric)))
 })
 
 
@@ -27,6 +29,12 @@ test_that("dataset_metrics returns correct structure", {
     stringsAsFactors = FALSE
   )
 
+  labels_df <- data.frame(
+    var = c("var_test1", "var_test2"),
+    type = c("numeric_small", "numeric_large"),
+    stringsAsFactors = FALSE
+  )
+
   df_metrics <- dataset_metrics(df_example)
 
   expect_s3_class(df_metrics, "data.frame")
@@ -36,6 +44,17 @@ test_that("dataset_metrics returns correct structure", {
   expect_equal(nrow(df_metrics), ncol(df_example))
 
   expect_null(rownames(df_metrics))
+
+  df_metrics_labels <- dataset_metrics(df_example, labels_df = labels_df)
+
+  expect_equal(
+    df_metrics_labels$type[df_metrics_labels$variable == "var_test1"],
+    "numeric_small"
+  )
+  expect_equal(
+    df_metrics_labels$type[df_metrics_labels$variable == "var_test2"],
+    "numeric_large"
+  )
 })
 
 test_that("predict_type returns correct structure", {
@@ -45,27 +64,20 @@ test_that("predict_type returns correct structure", {
     var2 = c(4, 5, 5, 6)
   )
 
-  # --- Call the predict_type function ---
   preds <- predict_type(df_example)
 
-  # --- Check that the output is a tibble ---
   expect_s3_class(preds, "tbl_df")
 
-  # --- Check that the 'variable' column exists ---
   expect_true("variable" %in% names(preds))
 
-  # --- Check that predicted class column exists and is character ---
   expect_true(".pred_class" %in% names(preds))
   expect_s3_class(preds$.pred_class, "factor")
 
-  # --- Check that probability columns exist and are numeric ---
   prob_cols <- c(".pred_N", ".pred_O", ".pred_S")
   expect_true(all(prob_cols %in% names(preds)))
   expect_true(all(sapply(preds[prob_cols], is.numeric)))
 
-  # --- Check that the number of rows matches the number of input variables ---
   expect_equal(nrow(preds), ncol(df_example))
 
-  # --- Check that the values in 'variable' column match the input dataset columns ---
   expect_equal(preds$variable, colnames(df_example))
 })

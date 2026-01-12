@@ -1,7 +1,7 @@
 check_numeric <- function(var, var_name, metric_name) {
   if (is.null(var_name)) {
-    var_name <- deparse(substitute(var)) |>
-      sub(".*\\$", "", x = .data)
+    var_name <- deparse(substitute(var))
+    var_name <- sub(".*\\$", "", var_name)
   }
 
   if (!is.numeric(var)) {
