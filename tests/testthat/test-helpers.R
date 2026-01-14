@@ -43,7 +43,7 @@ test_that("dataset_metrics returns correct structure", {
 
   expect_equal(nrow(df_metrics), ncol(df_example))
 
-  expect_null(rownames(df_metrics))
+  expect_equal(rownames(df_metrics), c("1", "2"))
 
   df_metrics_labels <- dataset_metrics(df_example, labels_df = labels_df)
 

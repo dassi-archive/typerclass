@@ -56,16 +56,16 @@ dataset_metrics <- function(data, labels_df = NULL) {
       if (length(tmp) > 0) metrics_values$type <- tmp[1]
     }
 
-    as.data.frame(metrics_values, row.names = NULL)
+    as.data.frame(metrics_values)
   })
 
   df_metrics <- dplyr::select(
     df_metrics,
-    variable,
+    .data$variable,
     dplyr::everything()
   )
 
-  df_metrics <- dplyr::as_tibble(df_metrics, .name_repair = "minimal")
+  rownames(df_metrics) <- NULL
 
   return(df_metrics)
 }
