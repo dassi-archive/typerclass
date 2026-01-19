@@ -37,9 +37,13 @@ compute_var_metrics <- function(var, var_name, metrics) {
 
 # dataset_metrics() ------------------------------------------------------------
 dataset_metrics <- function(data, labels_df = NULL) {
-  metrics_list <- select_metrics() # metrics list
+  # ---- Keep only numeric variables ----
+  numeric_vars <- sapply(data, is.numeric)
+  data_numeric <- data[, numeric_vars, drop = FALSE]
 
-  df_metrics <- map_dfr(unname(names(data)), function(var_name) {
+  metrics_list <- select_metrics()
+
+  df_metrics <- map_dfr(unname(names(data_numeric)), function(var_name) {
     # --- Compute all metrics for this variable ---
     metrics_values <- compute_var_metrics(
       var = data[[var_name]],
@@ -73,8 +77,17 @@ dataset_metrics <- function(data, labels_df = NULL) {
 
 # predict_type() ---------------------------------------------------------------
 predict_type <- function(data) {
+  # ---- Separate numeric and non-numeric variables ----
+  numeric_vars <- sapply(data, is.numeric)
+  non_numeric_vars <- names(data)[!numeric_vars]
+
+  # ---- Subset data to numeric variables only ----
+  numeric_data <- data[, numeric_vars, drop = FALSE]
+
   # ---- Compute variable-level metrics ----
-  metrics <- dataset_metrics(data)
+  metrics <- dataset_metrics(numeric_data)
+
+  #TODO: aggiungere test su questa parte (il numero di var deve essere quello del df iniziale)
 
   # ---- Ensure 'dataset' column exists (model requirement) ----
   if (!"dataset" %in% names(metrics)) {
@@ -87,12 +100,30 @@ predict_type <- function(data) {
   # ---- Probability predictions ----
   preds_prob <- as_tibble(predict(rf_final_fit, metrics, type = "prob"))
 
-  # ---- Combine all results ----
-  out <- bind_cols(
+  # ---- Combine numeric predictions ----
+  numeric_out <- dplyr::bind_cols(
     tibble(variable = metrics$variable),
     preds_class,
     preds_prob
   )
+
+  # ---- Handle non-numeric variables ----
+  if (length(non_numeric_vars) > 0) {
+    non_numeric_df <- tibble(
+      variable = non_numeric_vars,
+      .pred_class = "N",
+      .pred_N = NA,
+      .pred_O = NA,
+      .pred_S = NA
+    )
+    # Merge numeric + non-numeric
+    out <- dplyr::bind_rows(numeric_out, non_numeric_df)
+  } else {
+    out <- numeric_out
+  }
+
+  # ---- Reorder to match original dataset ----
+  out <- out[match(names(data), out$variable), ]
 
   return(out)
 }

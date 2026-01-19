@@ -139,3 +139,6 @@ The method implemented in `typerclass` has been tested on official survey microd
 ") -->
 
 <!-- DISCUSS: alla fine nel dataset di partenza non ci sono altre variabili quindi ho lasciato HWACTUAL . non so però se si capisce dalle etichette che oltre ai valori presenti ci sono il numero delle ore non etichettate. valutiamo se invece che print del file etichette (e forse delle etichette proprio caricate) ha senso spiegare le variabili in altro modo. -->
+
+
+#TODO: mettere il pezzo di N deterministico per character/logical
