@@ -24,7 +24,7 @@ check_numeric <- function(var, var_name, metric_name) {
         "."
       )
     }
-    cli_abort(msg, .envir = parent.frame())
+    cli_abort(msg, class = "check_numeric_error")
   }
 
   TRUE

@@ -13,6 +13,3 @@ var_char_empty <- character(0)
 # Logical
 var_logical <- c(TRUE, TRUE, FALSE, NA)
 var_na <- c(NA, NA, NA)
-
-#TODO: in fase di ingest gestire le stringhe e vari tipi di R (es. date)perclassificare
-#in modo deterministico type.

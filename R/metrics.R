@@ -110,31 +110,6 @@ compute_is_character <- function(var, var_name) {
 }
 
 
-# Label Coverage -------------------------------------------------------------
-compute_label_cover <- function(var, var_name, labels_df = NULL) {
-  non_na <- var[!is.na(var)]
-
-  if (is.null(labels_df) || is.null(var_name)) {
-    return(NA_real_)
-  }
-
-  labels_var <- labels_df |>
-    filter(var == var_name & .data$value != ">")
-
-  if (length(non_na) == 0) {
-    return(NA_real_)
-  }
-
-  df_values <- data.frame(
-    var = var_name,
-    value = unique(non_na),
-    stringsAsFactors = FALSE
-  )
-
-  merged <- merge(df_values, labels_var, by = c("var", "value"), all.x = TRUE)
-
-  sum(!is.na(merged$label)) / nrow(merged)
-}
 # Shannon Entropy ------------------------------------------------------------
 compute_shannon_entropy <- function(var, var_name) {
   check_numeric(

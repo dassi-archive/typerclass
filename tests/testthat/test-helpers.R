@@ -1,9 +1,11 @@
+# select_metrics() -------------------------------------------------------------
 test_that("select_metrics returns a character vector", {
   metrics <- select_metrics()
   expect_type(metrics, "character")
 })
 
 
+# compute_var_metrics() --------------------------------------------------------
 test_that("compute_var_metrics returns a named list", {
   metrics <- c("n_unique_values", "std_dev")
 
@@ -19,20 +21,14 @@ test_that("compute_var_metrics returns a named list", {
 })
 
 
+# dataset_metrics() ------------------------------------------------------------
 test_that("dataset_metrics returns correct structure", {
   var_test1 <- c(1, 2, 2, 3)
   var_test2 <- c(99, 1, 2, 98)
 
-  df_example <- data.frame(
+  df_example <- tibble(
     var_test1 = var_test1,
-    var_test2 = var_test2,
-    stringsAsFactors = FALSE
-  )
-
-  labels_df <- data.frame(
-    var = c("var_test1", "var_test2"),
-    type = c("numeric_small", "numeric_large"),
-    stringsAsFactors = FALSE
+    var_test2 = var_test2
   )
 
   df_metrics <- dataset_metrics(df_example)
@@ -44,74 +40,61 @@ test_that("dataset_metrics returns correct structure", {
   expect_equal(nrow(df_metrics), ncol(df_example))
 
   expect_equal(rownames(df_metrics), c("1", "2"))
-
-  df_metrics_labels <- dataset_metrics(df_example, labels_df = labels_df)
-
-  expect_equal(
-    df_metrics_labels$type[df_metrics_labels$variable == "var_test1"],
-    "numeric_small"
-  )
-  expect_equal(
-    df_metrics_labels$type[df_metrics_labels$variable == "var_test2"],
-    "numeric_large"
-  )
 })
 
 test_that("dataset_metrics throws error for non-numeric variables", {
-  df_numeric <- data.frame(
+  df_numeric <- tibble(
     x = c(1, 2, 3),
     y = c(4, 5, 6)
   )
   expect_silent(dataset_metrics(df_numeric))
 
-  df_mixed <- data.frame(
+  df_mixed <- tibble(
     x = c(1, 2, 3),
     y = c("a", "b", "c")
   )
   expect_error(
     dataset_metrics(df_mixed),
-    regexp = "dataset_metrics\\(\\) only works with numeric variables\\."
+    class = "dataset_metrics_not_numeric"
   )
 
-  df_factor <- data.frame(
+  df_factor <- tibble(
     x = c(1, 2, 3),
     y = factor(c("A", "B", "C"))
   )
   expect_error(
     dataset_metrics(df_factor),
-    regexp = "dataset_metrics\\(\\) only works with numeric variables\\."
+    class = "dataset_metrics_not_numeric"
   )
 
-  df_logical <- data.frame(
+  df_logical <- tibble(
     x = c(1, 2, 3),
     y = c(TRUE, FALSE, TRUE)
   )
   expect_error(
     dataset_metrics(df_logical),
-    regexp = "dataset_metrics\\(\\) only works with numeric variables\\."
+    class = "dataset_metrics_not_numeric"
   )
 })
 
+
+# predict_type() ---------------------------------------------------------------
 test_that("predict_type returns correct structure for multiple variable types", {
   # --- Example dataset with numeric, factor, character, logical, date, and other ---
-  df_example <- data.frame(
+  df_example <- tibble(
     num1 = c(1, 2, 3, 4),
     num2 = c(4, 5, 6, 7),
     fac1 = factor(c("A", "B", "A", "C")),
     char1 = c("x", "y", "z", "x"),
     log1 = c(TRUE, FALSE, TRUE, FALSE),
-    date1 = as.Date(c("2023-01-01", "2023-01-02", "2023-01-03", "2023-01-04")),
-    stringsAsFactors = FALSE
+    date1 = as.Date(c("2023-01-01", "2023-01-02", "2023-01-03", "2023-01-04"))
   )
 
   preds <- predict_type(df_example)
-
+  print(str(preds))
   expect_s3_class(preds, "tbl_df")
   expect_true("variable" %in% names(preds))
   expect_true(".pred_class" %in% names(preds))
-
-  # expect_s3_class(preds$.pred_class, "factor")
-  #DISCUSS: qui avevamo factor per un motivo?
   expect_type(preds$.pred_class, "character")
 
   prob_cols <- c(".pred_N", ".pred_O", ".pred_S")

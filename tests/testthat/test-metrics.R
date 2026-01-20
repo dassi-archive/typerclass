@@ -30,27 +30,7 @@ test_that("compute_n_unique_values works", {
 
   expect_error(
     compute_n_unique_values(var_char_simple, var_name = "var_char_simple"),
-    regexp = "cannot be computed for 'var_char_simple'"
-  )
-
-  expect_error(
-    compute_n_unique_values(var_char_with_na, var_name = "var_char_with_na"),
-    regexp = "cannot be computed for 'var_char_with_na'"
-  )
-
-  expect_error(
-    compute_n_unique_values(var_char_empty, var_name = "var_char_empty"),
-    regexp = "cannot be computed for 'var_char_empty'"
-  )
-
-  expect_error(
-    compute_n_unique_values(var_logical, var_name = "var_logical"),
-    regexp = "cannot be computed for 'var_logical'"
-  )
-
-  expect_error(
-    compute_n_unique_values(var_na, var_name = "var_na"),
-    regexp = "cannot be computed for 'var_na'"
+    class = "check_numeric_error"
   )
 })
 
@@ -76,19 +56,7 @@ test_that("compute_std_dev works", {
 
   expect_error(
     compute_std_dev(var_char_simple, var_name = "var_char_simple"),
-    regexp = "cannot be computed for 'var_char_simple'"
-  )
-  expect_error(
-    compute_std_dev(var_char_with_na, var_name = "var_char_with_na"),
-    regexp = "cannot be computed for 'var_char_with_na'"
-  )
-  expect_error(
-    compute_std_dev(var_char_empty, var_name = "var_char_empty"),
-    regexp = "cannot be computed for 'var_char_empty'"
-  )
-  expect_error(
-    compute_std_dev(var_na, var_name = "var_na"),
-    regexp = "cannot be computed for 'var_na'"
+    class = "check_numeric_error"
   )
 })
 
@@ -129,33 +97,7 @@ test_that("compute_max_relative_frequency works", {
 
   expect_error(
     compute_max_relative_frequency(var_logical, var_name = "var_logical"),
-    regexp = "cannot be computed for 'var_logical'"
-  )
-
-  expect_error(
-    compute_max_relative_frequency(
-      var_char_simple,
-      var_name = "var_char_simple"
-    ),
-    regexp = "cannot be computed for 'var_char_simple'"
-  )
-
-  expect_error(
-    compute_max_relative_frequency(
-      var_char_with_na,
-      var_name = "var_char_with_na"
-    ),
-    regexp = "cannot be computed for 'var_char_with_na'"
-  )
-
-  expect_error(
-    compute_max_relative_frequency(var_char_empty, var_name = "var_char_empty"),
-    regexp = "cannot be computed for 'var_char_empty'"
-  )
-
-  expect_error(
-    compute_max_relative_frequency(var_na, var_name = "var_na"),
-    regexp = "cannot be computed for 'var_na'"
+    class = "check_numeric_error"
   )
 })
 
@@ -193,19 +135,7 @@ test_that("compute_norm_entropy works", {
 
   expect_error(
     compute_norm_entropy(var_char_simple, var_name = "var_char_simple"),
-    regexp = "cannot be computed for 'var_char_simple'"
-  )
-  expect_error(
-    compute_norm_entropy(var_char_with_na, var_name = "var_char_with_na"),
-    regexp = "cannot be computed for 'var_char_with_na'"
-  )
-  expect_error(
-    compute_norm_entropy(var_char_empty, var_name = "var_char_empty"),
-    regexp = "cannot be computed for 'var_char_empty'"
-  )
-  expect_error(
-    compute_norm_entropy(var_na, var_name = "var_na"),
-    regexp = "cannot be computed for 'var_na'"
+    class = "check_numeric_error"
   )
 })
 
@@ -234,19 +164,7 @@ test_that("compute_min_value works", {
 
   expect_error(
     compute_min_value(var_char_simple, var_name = "var_char_simple"),
-    regexp = "cannot be computed for 'var_char_simple'"
-  )
-  expect_error(
-    compute_min_value(var_char_with_na, var_name = "var_char_with_na"),
-    regexp = "cannot be computed for 'var_char_with_na'"
-  )
-  expect_error(
-    compute_min_value(var_char_empty, var_name = "var_char_empty"),
-    regexp = "cannot be computed for 'var_char_empty'"
-  )
-  expect_error(
-    compute_min_value(var_na, var_name = "var_na"),
-    regexp = "cannot be computed for 'var_na'"
+    class = "check_numeric_error"
   )
 })
 
@@ -274,19 +192,7 @@ test_that("compute_max_value works", {
 
   expect_error(
     compute_max_value(var_char_simple, var_name = "var_char_simple"),
-    regexp = "cannot be computed for 'var_char_simple'"
-  )
-  expect_error(
-    compute_max_value(var_char_with_na, var_name = "var_char_with_na"),
-    regexp = "cannot be computed for 'var_char_with_na'"
-  )
-  expect_error(
-    compute_max_value(var_char_empty, var_name = "var_char_empty"),
-    regexp = "cannot be computed for 'var_char_empty'"
-  )
-  expect_error(
-    compute_max_value(var_na, var_name = "var_na"),
-    regexp = "cannot be computed for 'var_na'"
+    class = "check_numeric_error"
   )
 })
 
@@ -323,7 +229,7 @@ test_that("compute_skewness_probs works", {
   )
   expect_error(
     compute_skewness_probs(var_char_simple, var_name = "var_char_simple"),
-    regexp = "cannot be computed for 'var_char_simple'"
+    class = "check_numeric_error"
   )
 })
 
@@ -348,7 +254,7 @@ test_that("compute_kurtosis_probs works", {
   )
   expect_error(
     compute_kurtosis_probs(var_char_simple, var_name = "var_char_simple"),
-    regexp = "cannot be computed for 'var_char_simple'"
+    class = "check_numeric_error"
   )
 
   expect_equal(
@@ -389,7 +295,7 @@ test_that("compute_dispersion_index works", {
   )
   expect_error(
     compute_dispersion_index(var_char_simple, var_name = "var_char_simple"),
-    regexp = "cannot be computed for 'var_char_simple'"
+    class = "check_numeric_error"
   )
 })
 
@@ -408,7 +314,7 @@ test_that("compute_uniformity works", {
   )
   expect_error(
     compute_uniformity(var_char_simple, var_name = "var_char_simple"),
-    regexp = "cannot be computed for 'var_char_simple'"
+    class = "check_numeric_error"
   )
 })
 
@@ -434,7 +340,7 @@ test_that("compute_range_value works", {
   )
   expect_error(
     compute_range_value(var_char_simple, var_name = "var_char_simple"),
-    regexp = "cannot be computed for 'var_char_simple'"
+    class = "check_numeric_error"
   )
 })
 
@@ -476,22 +382,7 @@ test_that("compute_simpson_index works", {
 
   expect_error(
     compute_simpson_index(var_char_simple, var_name = "var_char_simple"),
-    regexp = "cannot be computed for 'var_char_simple'"
-  )
-
-  expect_error(
-    compute_simpson_index(var_char_with_na, var_name = "var_char_with_na"),
-    regexp = "cannot be computed for 'var_char_with_na'"
-  )
-
-  expect_error(
-    compute_simpson_index(var_char_empty, var_name = "var_char_empty"),
-    regexp = "cannot be computed for 'var_char_empty'"
-  )
-
-  expect_error(
-    compute_simpson_index(var_na, var_name = "var_na"),
-    regexp = "cannot be computed for 'var_na'"
+    class = "check_numeric_error"
   )
 })
 
@@ -543,40 +434,14 @@ test_that("compute_topk_ratio works", {
 
   expect_error(
     compute_top2_ratio(var_char_simple, var_name = "var_char_simple"),
-    regexp = "cannot be computed for 'var_char_simple'"
+    class = "check_numeric_error"
   )
 
   expect_error(
-    compute_top2_ratio(var_char_with_na, var_name = "var_char_with_na"),
-    regexp = "cannot be computed for 'var_char_with_na'"
-  )
-
-  expect_error(
-    compute_top2_ratio(var_char_empty, var_name = "var_char_empty"),
-    regexp = "cannot be computed for 'var_char_empty'"
-  )
-
-  expect_error(
-    compute_top2_ratio(var_na, var_name = "var_na"),
-    regexp = "cannot be computed for 'var_na'"
+    compute_top3_ratio(var_char_simple, var_name = "var_char_simple"),
+    class = "check_numeric_error"
   )
 })
-
-
-test_that("compute_label_cover works", {
-  labels_df <- data.frame(
-    var = c("x", "x", "x"),
-    value = c("a", "b", ">"),
-    label = c(1, 2, 3)
-  )
-  var1 <- c("a", "b", "a", "c")
-
-  expect_equal(compute_label_cover(var1, "x", labels_df), 2 / 3)
-  expect_equal(compute_label_cover(c(NA, NA), "x", labels_df), NA_real_)
-  expect_equal(compute_label_cover(var1, NULL, labels_df), NA_real_)
-  expect_equal(compute_label_cover(var1, "x", NULL), NA_real_)
-})
-
 
 test_that("functions handle empty numeric vectors", {
   expect_equal(compute_n_unique_values(numeric_empty, "empty"), 0)

@@ -14,7 +14,6 @@ select_metrics <- function() {
     "range_value",
     "is_character",
     "shannon_entropy",
-    #  "label_coverage",
     "simpson_index",
     "skewness_probs",
     "kurtosis_probs",
@@ -37,8 +36,11 @@ compute_var_metrics <- function(var, var_name, metrics) {
 
 # dataset_metrics() ------------------------------------------------------------
 dataset_metrics <- function(data, labels_df = NULL) {
-  if (!all(purrr::map_lgl(data, is.numeric))) {
-    cli_abort("dataset_metrics() only works with numeric variables.")
+  if (!all(map_lgl(data, is.numeric))) {
+    cli_abort(
+      "dataset_metrics() only works with numeric variables.",
+      class = "dataset_metrics_not_numeric"
+    )
   }
 
   metrics_list <- select_metrics()
@@ -54,28 +56,56 @@ dataset_metrics <- function(data, labels_df = NULL) {
     # --- Append variable name ---
     metrics_values$variable <- var_name
 
-    # --- Append type only if labels_df is provided ---
-    if (!is.null(labels_df) && "type" %in% names(labels_df)) {
-      tmp <- labels_df$type[labels_df$var == var_name]
-      if (length(tmp) > 0) metrics_values$type <- tmp[1]
-    }
-
-    as.data.frame(metrics_values)
+    as_tibble(metrics_values)
   })
 
-  df_metrics <- dplyr::select(
+  df_metrics <- select(
     df_metrics,
     .data$variable,
-    dplyr::everything()
+    everything()
   )
 
   rownames(df_metrics) <- NULL
 
-  return(df_metrics)
+  df_metrics
 }
 
 
 # predict_type() ---------------------------------------------------------------
+#' Predict measurement types for dataset variables
+#'
+#' Computes distributional metrics for numeric variables and uses a pretrained
+#' random-forest model to classify each variable as nominal (N), ordinal (O),
+#' or scale (S). Non-numeric variables are handled deterministically:
+#' character/logical variables are marked as nominal, date variables as ordinal,
+#' and unsupported types receive empty predictions.
+#'
+#' @param data A data frame of variables to classify.
+#'
+#' @return A tibble with one row per input variable and the following columns:
+#' \describe{
+#'   \item{variable}{Original variable name.}
+#'   \item{.pred_class}{Predicted class (N, O, or S).}
+#'   \item{.pred_N}{Probability of nominal class.}
+#'   \item{.pred_O}{Probability of ordinal class.}
+#'   \item{.pred_S}{Probability of scale class.}
+#' }
+#' Rows are returned in the same order as the columns of `data`. For variables
+#' that are not processed by the model, probability columns are `NA`.
+#'
+#' @details
+#' Factors are coerced to numeric and included with other numeric variables.
+#' The model object `rf_final_fit` is loaded with the package.
+#'
+#' @examples
+#' \dontrun{
+#' df <- tibble(
+#'   age = c(20, 30, 40),
+#'   sex = c("M", "F", "F")
+#' )
+#' predict_type(df)
+#' }
+#' @export
 predict_type <- function(data) {
   stopifnot(is.data.frame(data))
 
@@ -144,8 +174,6 @@ predict_type <- function(data) {
     )
     out <- dplyr::bind_rows(out, other_predict)
   }
-
-  #TODO: aggiungere test su questa parte (il numero di var deve essere quello del df iniziale)
 
   # ---- Ensure 'dataset' column exists (model requirement) ----
   if (!"dataset" %in% names(metrics)) {

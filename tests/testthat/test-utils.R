@@ -3,6 +3,10 @@ test_that("check_numeric errors for character variables without metric_name (ful
     check_numeric(var_char_simple, "var_char_simple", NULL),
     "Error: cannot compute for 'var_char_simple' because it is not numeric but is character\\."
   )
+  expect_error(
+    check_numeric(var_char_with_na, "var_char_with_na", NULL),
+    class = "check_numeric_error"
+  )
 })
 
 
