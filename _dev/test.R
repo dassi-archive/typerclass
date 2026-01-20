@@ -6,7 +6,7 @@ devtools::test()
 covr::report()
 
 # Example run of compute_var_metrics
-df <- readr::read_csv("_dev/data/SN217.csv", guess_max = 1000000)
+df <- readr::read_csv("inst/SN217.csv", guess_max = 1000000)
 
 results <- compute_var_metrics(
   var = df$AMATR,

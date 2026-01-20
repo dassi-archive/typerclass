@@ -57,27 +57,103 @@ test_that("dataset_metrics returns correct structure", {
   )
 })
 
-test_that("predict_type returns correct structure", {
-  # --- Example dataset with two numeric variables ---
+test_that("dataset_metrics throws error for non-numeric variables", {
+  df_numeric <- data.frame(
+    x = c(1, 2, 3),
+    y = c(4, 5, 6)
+  )
+  expect_silent(dataset_metrics(df_numeric))
+
+  df_mixed <- data.frame(
+    x = c(1, 2, 3),
+    y = c("a", "b", "c")
+  )
+  expect_error(
+    dataset_metrics(df_mixed),
+    regexp = "dataset_metrics\\(\\) only works with numeric variables\\."
+  )
+
+  df_factor <- data.frame(
+    x = c(1, 2, 3),
+    y = factor(c("A", "B", "C"))
+  )
+  expect_error(
+    dataset_metrics(df_factor),
+    regexp = "dataset_metrics\\(\\) only works with numeric variables\\."
+  )
+
+  df_logical <- data.frame(
+    x = c(1, 2, 3),
+    y = c(TRUE, FALSE, TRUE)
+  )
+  expect_error(
+    dataset_metrics(df_logical),
+    regexp = "dataset_metrics\\(\\) only works with numeric variables\\."
+  )
+})
+
+test_that("predict_type returns correct structure for multiple variable types", {
+  # --- Example dataset with numeric, factor, character, logical, date, and other ---
   df_example <- data.frame(
-    var1 = c(1, 2, 2, 3),
-    var2 = c(4, 5, 5, 6)
+    num1 = c(1, 2, 3, 4),
+    num2 = c(4, 5, 6, 7),
+    fac1 = factor(c("A", "B", "A", "C")),
+    char1 = c("x", "y", "z", "x"),
+    log1 = c(TRUE, FALSE, TRUE, FALSE),
+    date1 = as.Date(c("2023-01-01", "2023-01-02", "2023-01-03", "2023-01-04")),
+    stringsAsFactors = FALSE
   )
 
   preds <- predict_type(df_example)
 
   expect_s3_class(preds, "tbl_df")
-
   expect_true("variable" %in% names(preds))
-
   expect_true(".pred_class" %in% names(preds))
-  expect_s3_class(preds$.pred_class, "factor")
+
+  # expect_s3_class(preds$.pred_class, "factor")
+  #DISCUSS: qui avevamo factor per un motivo?
+  expect_type(preds$.pred_class, "character")
 
   prob_cols <- c(".pred_N", ".pred_O", ".pred_S")
   expect_true(all(prob_cols %in% names(preds)))
-  expect_true(all(sapply(preds[prob_cols], is.numeric)))
+  expect_true(all(
+    sapply(preds[prob_cols], is.numeric) |
+      sapply(preds[prob_cols], function(x) all(is.na(x)))
+  ))
 
   expect_equal(nrow(preds), ncol(df_example))
 
   expect_equal(preds$variable, colnames(df_example))
+
+  numeric_vars <- c("num1", "num2", "fac1")
+  expect_true(all(
+    preds$variable[preds$variable %in% numeric_vars] %in% preds$variable
+  ))
+
+  char_log_date_vars <- c("char1", "log1", "date1")
+  expect_true(all(
+    preds$.pred_class[preds$variable %in% char_log_date_vars] %in% c("N", "O")
+  ))
+})
+
+test_that("predict_type handles 'other' variables correctly", {
+  df_example <- data.frame(
+    num1 = c(1, 2, 3),
+    fac1 = factor(c("A", "B", "C")),
+    other1 = I(list(list(a = 1), list(b = 2), list(c = 3))) # using I() to keep as 'other' (list-column)
+  )
+
+  preds <- predict_type(df_example)
+
+  # --- Check that 'other1' is included ---
+  expect_true("other1" %in% preds$variable)
+
+  # --- Check that its predicted class is empty string ---
+  other_row <- preds[preds$variable == "other1", ]
+  expect_equal(other_row$.pred_class, "")
+
+  # --- Check that probability columns are NA ---
+  expect_true(is.na(other_row$.pred_N))
+  expect_true(is.na(other_row$.pred_O))
+  expect_true(is.na(other_row$.pred_S))
 })

@@ -82,14 +82,6 @@ predict_type <- function(data) {
   # ---- Get datatypes from data ----
   dt_lst <- get_datatype(data)
 
-  # ---- Separate numeric and non-numeric variables ----
-  # numeric_vars <- sapply(data, is.numeric)
-  # non_numeric_vars <- names(data)[!numeric_vars]
-
-  # ---- Subset data to numeric variables only ----
-  # numeric_data <- data[, numeric_vars, drop = FALSE]
-
-  # ---- Convert factor variables to numeric ----
   if (length(dt_lst$factor) != 0) {
     for (f_var in dt_lst$factor) {
       data[[f_var]] <- as.numeric(data[[f_var]])
@@ -99,7 +91,7 @@ predict_type <- function(data) {
 
   # ---- Compute numeric variable-level metrics ----
   if (length(dt_lst$numeric) != 0) {
-    print(dt_lst$numeric)
+    # print(dt_lst$numeric)
     metrics <- dataset_metrics(data[, dt_lst$numeric])
     if (!"dataset" %in% names(metrics)) {
       metrics$dataset <- "dataset"
@@ -116,7 +108,6 @@ predict_type <- function(data) {
       preds_prob
     )
   }
-  # metrics <- dataset_metrics(d)
 
   # ---- Add character/logical variables ----
   if (length(dt_lst$character) != 0 | length(dt_lst$logical) != 0) {
@@ -160,34 +151,6 @@ predict_type <- function(data) {
   if (!"dataset" %in% names(metrics)) {
     metrics$dataset <- "dataset"
   }
-
-  # ---- Class predictions ----
-  # preds_class <- as_tibble(predict(rf_final_fit, metrics))
-
-  # # ---- Probability predictions ----
-  # preds_prob <- as_tibble(predict(rf_final_fit, metrics, type = "prob"))
-
-  # # ---- Combine numeric predictions ----
-  # numeric_out <- dplyr::bind_cols(
-  #   tibble(variable = metrics$variable),
-  #   preds_class,
-  #   preds_prob
-  # )
-
-  # ---- Handle non-numeric variables ----
-  # if (length(non_numeric_vars) > 0) {
-  #   non_numeric_df <- tibble(
-  #     variable = non_numeric_vars,
-  #     .pred_class = "N",
-  #     .pred_N = NA,
-  #     .pred_O = NA,
-  #     .pred_S = NA
-  #   )
-  #   # Merge numeric + non-numeric
-  #   out <- dplyr::bind_rows(numeric_out, non_numeric_df)
-  # } else {
-  #   out <- numeric_out
-  # }
 
   # ---- Reorder to match original dataset ----
   out <- out[match(names(data), out$variable), ]
