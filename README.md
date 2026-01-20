@@ -27,6 +27,7 @@ For such variables:
 - `.pred_class` is set to `N` (Nominal)
 - `.pred_N`, `.pred_O`, and `.pred_S` are returned as `NA`
 
+<!-- #TODO:aggiungere che character nominale, data ordinale, truefalse nominale, factor proviamo a metterla numerica e vedere cosa succede -->
 
 ## Installation
 

@@ -37,13 +37,13 @@ compute_var_metrics <- function(var, var_name, metrics) {
 
 # dataset_metrics() ------------------------------------------------------------
 dataset_metrics <- function(data, labels_df = NULL) {
-  # ---- Keep only numeric variables ----
-  numeric_vars <- sapply(data, is.numeric)
-  data_numeric <- data[, numeric_vars, drop = FALSE]
+  if (!all(purrr::map_lgl(data, is.numeric))) {
+    cli_abort("dataset_metrics() only works with numeric variables.")
+  }
 
   metrics_list <- select_metrics()
 
-  df_metrics <- map_dfr(unname(names(data_numeric)), function(var_name) {
+  df_metrics <- map_dfr(unname(names(data)), function(var_name) {
     # --- Compute all metrics for this variable ---
     metrics_values <- compute_var_metrics(
       var = data[[var_name]],
@@ -77,15 +77,82 @@ dataset_metrics <- function(data, labels_df = NULL) {
 
 # predict_type() ---------------------------------------------------------------
 predict_type <- function(data) {
+  stopifnot(is.data.frame(data))
+
+  # ---- Get datatypes from data ----
+  dt_lst <- get_datatype(data)
+
   # ---- Separate numeric and non-numeric variables ----
-  numeric_vars <- sapply(data, is.numeric)
-  non_numeric_vars <- names(data)[!numeric_vars]
+  # numeric_vars <- sapply(data, is.numeric)
+  # non_numeric_vars <- names(data)[!numeric_vars]
 
   # ---- Subset data to numeric variables only ----
-  numeric_data <- data[, numeric_vars, drop = FALSE]
+  # numeric_data <- data[, numeric_vars, drop = FALSE]
 
-  # ---- Compute variable-level metrics ----
-  metrics <- dataset_metrics(numeric_data)
+  # ---- Convert factor variables to numeric ----
+  if (length(dt_lst$factor) != 0) {
+    for (f_var in dt_lst$factor) {
+      data[[f_var]] <- as.numeric(data[[f_var]])
+      dt_lst$numeric <- c(dt_lst$numeric, f_var)
+    }
+  }
+
+  # ---- Compute numeric variable-level metrics ----
+  if (length(dt_lst$numeric) != 0) {
+    print(dt_lst$numeric)
+    metrics <- dataset_metrics(data[, dt_lst$numeric])
+    if (!"dataset" %in% names(metrics)) {
+      metrics$dataset <- "dataset"
+    }
+    preds_class <- as_tibble(predict(rf_final_fit, metrics))
+
+    # ---- Probability predictions ----
+    preds_prob <- as_tibble(predict(rf_final_fit, metrics, type = "prob"))
+
+    # ---- Combine numeric predictions ----
+    out <- dplyr::bind_cols(
+      tibble(variable = metrics$variable),
+      preds_class,
+      preds_prob
+    )
+  }
+  # metrics <- dataset_metrics(d)
+
+  # ---- Add character/logical variables ----
+  if (length(dt_lst$character) != 0 | length(dt_lst$logical) != 0) {
+    char_predict <- tibble(
+      variable = c(dt_lst$character, dt_lst$logical),
+      .pred_class = "N",
+      .pred_N = NA,
+      .pred_O = NA,
+      .pred_S = NA
+    )
+    out <- dplyr::bind_rows(out, char_predict)
+  }
+
+  # ---- Add date variables ----
+  if (length(dt_lst$date) != 0) {
+    date_predict <- tibble(
+      variable = dt_lst$date,
+      .pred_class = "O",
+      .pred_N = NA,
+      .pred_O = NA,
+      .pred_S = NA
+    )
+    out <- dplyr::bind_rows(out, date_predict)
+  }
+
+  # ---- Add date variables ----
+  if (length(dt_lst$other) != 0) {
+    other_predict <- tibble(
+      variable = dt_lst$other,
+      .pred_class = "",
+      .pred_N = NA,
+      .pred_O = NA,
+      .pred_S = NA
+    )
+    out <- dplyr::bind_rows(out, other_predict)
+  }
 
   #TODO: aggiungere test su questa parte (il numero di var deve essere quello del df iniziale)
 
@@ -95,32 +162,32 @@ predict_type <- function(data) {
   }
 
   # ---- Class predictions ----
-  preds_class <- as_tibble(predict(rf_final_fit, metrics))
+  # preds_class <- as_tibble(predict(rf_final_fit, metrics))
 
-  # ---- Probability predictions ----
-  preds_prob <- as_tibble(predict(rf_final_fit, metrics, type = "prob"))
+  # # ---- Probability predictions ----
+  # preds_prob <- as_tibble(predict(rf_final_fit, metrics, type = "prob"))
 
-  # ---- Combine numeric predictions ----
-  numeric_out <- dplyr::bind_cols(
-    tibble(variable = metrics$variable),
-    preds_class,
-    preds_prob
-  )
+  # # ---- Combine numeric predictions ----
+  # numeric_out <- dplyr::bind_cols(
+  #   tibble(variable = metrics$variable),
+  #   preds_class,
+  #   preds_prob
+  # )
 
   # ---- Handle non-numeric variables ----
-  if (length(non_numeric_vars) > 0) {
-    non_numeric_df <- tibble(
-      variable = non_numeric_vars,
-      .pred_class = "N",
-      .pred_N = NA,
-      .pred_O = NA,
-      .pred_S = NA
-    )
-    # Merge numeric + non-numeric
-    out <- dplyr::bind_rows(numeric_out, non_numeric_df)
-  } else {
-    out <- numeric_out
-  }
+  # if (length(non_numeric_vars) > 0) {
+  #   non_numeric_df <- tibble(
+  #     variable = non_numeric_vars,
+  #     .pred_class = "N",
+  #     .pred_N = NA,
+  #     .pred_O = NA,
+  #     .pred_S = NA
+  #   )
+  #   # Merge numeric + non-numeric
+  #   out <- dplyr::bind_rows(numeric_out, non_numeric_df)
+  # } else {
+  #   out <- numeric_out
+  # }
 
   # ---- Reorder to match original dataset ----
   out <- out[match(names(data), out$variable), ]
