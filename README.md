@@ -8,6 +8,26 @@
 
 The goal of Typerclass is to predict the type of variables (nominal, ordinal, or scale) based on their empirical distribution and observed values.
 
+Numeric variables are processed by the probabilistic prediction model.
+
+For numeric inputs, `typerclass` analyzes the empirical distribution of observed values and returns:
+- a predicted measurement type (`.pred_class`)
+- the estimated probabilities of each class:
+  - `.pred_N` (Nominal)
+  - `.pred_O` (Ordinal)
+  - `.pred_S` (Scale)
+
+The predicted class corresponds to the measurement level with the highest estimated probability.
+
+Variables of type `logical` or `character` are excluded from the probabilistic prediction model.
+
+These variables are deterministically classified as Nominal, since their measurement level cannot be inferred from an empirical numeric distribution.
+
+For such variables:
+- `.pred_class` is set to `N` (Nominal)
+- `.pred_N`, `.pred_O`, and `.pred_S` are returned as `NA`
+
+
 ## Installation
 
 You can install the development version of typerclass from [GitHub](https://github.com/) with: link
@@ -39,12 +59,14 @@ predict_type(df)
 
 
 # Example output
-#      var .pred_class .pred_nominal .pred_ordinal .pred_scale
-# NCOMP        scale     0.1234567     0.2345678    0.6419755
-# ORDCOM     ordinal     0.2345678     0.5432109    0.2222215
-# POSIND     nominal     0.6543210     0.1234567   0.2222223
-# RELPAR     ordinal     0.3456789     0.4567890    0.197532  
-# SEX        nominal     0.7654321     0.1234567    0.1111112
+## A tibble: 5 × 5
+#  variable .pred_class .pred_N .pred_O .pred_S
+#  <chr>    <chr>         <dbl>   <dbl>   <dbl>
+#1 NCOMP    N             0.502  0.442   0.0560
+#2 ORDCOM   N             0.761  0.0323  0.207 
+#3 POSIND   N             0.781  0.0280  0.191 
+#4 RELPAR   N             0.761  0.0323  0.207 
+#5 SEX      N            NA     NA      NA     
 ```
 
 # Example with real dataset
@@ -141,4 +163,3 @@ The method implemented in `typerclass` has been tested on official survey microd
 <!-- DISCUSS: alla fine nel dataset di partenza non ci sono altre variabili quindi ho lasciato HWACTUAL . non so però se si capisce dalle etichette che oltre ai valori presenti ci sono il numero delle ore non etichettate. valutiamo se invece che print del file etichette (e forse delle etichette proprio caricate) ha senso spiegare le variabili in altro modo. -->
 
 
-#TODO: mettere il pezzo di N deterministico per character/logical
