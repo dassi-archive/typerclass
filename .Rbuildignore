@@ -10,3 +10,6 @@
 ^inst/data$
 ^data-raw$
 ^_dev$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
