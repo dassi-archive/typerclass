@@ -1,4 +1,4 @@
-# TypeRClass <img src="man/figures/logo.png" align="right" />
+# TypeRClass <img src="man/figures/logo.png" align="right" height=200 />
 
 <!-- badges: start -->
 
