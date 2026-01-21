@@ -14,13 +14,12 @@ Source:
 [`DESCRIPTION`](https://github.com/dassi-archive/typerclass/blob/main/DESCRIPTION)
 
 Scisci D, De Santis G (2026). *typerclass: Predicts Types of Variables*.
-R package version 0.0.0.9000,
-<https://github.com/dassi-archive/typerclass>.
+R package version 0.0.1, <https://github.com/dassi-archive/typerclass>.
 
     @Manual{,
       title = {typerclass: Predicts Types of Variables},
       author = {Domingo Scisci and Giovanna {De Santis}},
       year = {2026},
-      note = {R package version 0.0.0.9000},
+      note = {R package version 0.0.1},
       url = {https://github.com/dassi-archive/typerclass},
     }
