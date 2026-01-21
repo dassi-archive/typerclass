@@ -26,10 +26,8 @@ library(patchwork)
 # library(probably)
 library(bundle)
 
-source("metrics_report.R")
-source("helpers_report.R")
-
-
+source("../R/metrics.R")
+source("../R/helpers.R")
 ```
 
 

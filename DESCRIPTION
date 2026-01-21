@@ -1,5 +1,5 @@
 Package: typerclass
-Title: What the Package Does (One Line, Title Case)
+Title: Predicts Types of Variables
 Version: 0.0.0.9000
 Authors@R: 
     c(
@@ -18,8 +18,11 @@ Authors@R:
             comment = c(ORCID = "0009-0002-2595-5906")
         )
     )
-Description: What the package does (one paragraph).
-License: file LICENSE
+Description: Predicts variable types (nominal, ordinal, scale) from
+    empirical distributions and observed values. Provides probabilistic class
+    estimates for numeric variables and deterministic nominal classification for
+    non-numeric types. Includes sample survey data and labels for demonstration.
+License: Apache License (== 2.0)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
