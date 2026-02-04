@@ -72,46 +72,7 @@
 
 
 
-    <div class="cell">
-<pre><code><span><span class="co">#&gt; ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──</span></span>
-<span><span class="co">#&gt; ✔ dplyr     1.2.0     ✔ readr     2.1.6</span></span>
-<span><span class="co">#&gt; ✔ forcats   1.0.1     ✔ stringr   1.6.0</span></span>
-<span><span class="co">#&gt; ✔ ggplot2   4.0.2     ✔ tibble    3.3.1</span></span>
-<span><span class="co">#&gt; ✔ lubridate 1.9.5     ✔ tidyr     1.3.2</span></span>
-<span><span class="co">#&gt; ✔ purrr     1.2.1</span></span>
-<span><span class="co">#&gt; ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──</span></span>
-<span><span class="co">#&gt; ✖ dplyr::filter() masks stats::filter()</span></span>
-<span><span class="co">#&gt; ✖ dplyr::lag()    masks stats::lag()</span></span>
-<span><span class="co">#&gt; ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</span></span>
-<span><span class="co">#&gt; ── Attaching packages ────────────────────────────────────── tidymodels 1.4.1 ──</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; ✔ broom        1.0.12     ✔ rsample      1.3.2</span></span>
-<span><span class="co">#&gt; ✔ dials        1.4.2      ✔ tailor       0.1.0</span></span>
-<span><span class="co">#&gt; ✔ infer        1.1.0      ✔ tune         2.0.1</span></span>
-<span><span class="co">#&gt; ✔ modeldata    1.5.1      ✔ workflows    1.3.0</span></span>
-<span><span class="co">#&gt; ✔ parsnip      1.4.1      ✔ workflowsets 1.1.1</span></span>
-<span><span class="co">#&gt; ✔ recipes      1.3.1      ✔ yardstick    1.3.2</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──</span></span>
-<span><span class="co">#&gt; ✖ scales::discard() masks purrr::discard()</span></span>
-<span><span class="co">#&gt; ✖ dplyr::filter()   masks stats::filter()</span></span>
-<span><span class="co">#&gt; ✖ recipes::fixed()  masks stringr::fixed()</span></span>
-<span><span class="co">#&gt; ✖ dplyr::lag()      masks stats::lag()</span></span>
-<span><span class="co">#&gt; ✖ yardstick::spec() masks readr::spec()</span></span>
-<span><span class="co">#&gt; ✖ recipes::step()   masks stats::step()</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; Attaching package: 'vip'</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:utils':</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt;     vi</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; here() starts at /home/runner/work/typerclass/typerclass</span></span></code></pre>
-</div>
-<section class="level2"><h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+    <section class="level2"><h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>This document presents the model training and evaluation process carried out using Typerclass. The goal is to provide a clear overview of the methodological choices and results of the modeling process.</p>
 </section><section class="level2"><h2 id="key-decisions-in-the-modeling-process">Key decisions in the modeling process<a class="anchor" aria-label="anchor" href="#key-decisions-in-the-modeling-process"></a>
@@ -176,14 +137,6 @@ dispersion.</li>
 </ul>
 <p>The table provides an overview of all indicators used in the model. Most indicators have no missing values, ensuring reliable inputs for training. The only exception is <code>dispersion_index</code>, which contains 128 missing values. The <code>ranger</code> package can handle missing values by default; preliminary tests also showed that imputation did not improve model performance.</p>
 <div class="cell">
-<pre><code><span><span class="co">#&gt; Rows: 1167 Columns: 18</span></span>
-<span><span class="co">#&gt; ── Column specification ────────────────────────────────────────────────────────</span></span>
-<span><span class="co">#&gt; Delimiter: ","</span></span>
-<span><span class="co">#&gt; chr  (3): variable, dataset, type</span></span>
-<span><span class="co">#&gt; dbl (15): n_unique_values, std_dev, max_relative_frequency, norm_entropy, mi...</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.</span></span>
-<span><span class="co">#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</span></span></code></pre>
 <div class="cell-output-display">
 <div id="zzkevdscag" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>#zzkevdscag table {
@@ -715,12 +668,6 @@ dispersion.</li>
 <p>This section shows the distributions of all indicators, highlighting variability and potential outliers. Several indicators display heavy tails and numerous outliers, while others (e.g., proportion-based measures) are more tightly concentrated; overall, the plots suggest substantial heterogeneity across predictors.</p>
 <p>To improve readability, a log transformation (log10 with +1) was applied to a subset of indicators with very different scales or heavy tails. The remaining panels are shown on the original scale so that comparably scaled indicators can be interpreted directly.</p>
 <div class="cell">
-<pre><code><span><span class="co">#&gt; Warning: There was 1 warning in `mutate()`.</span></span>
-<span><span class="co">#&gt; ℹ In argument: `value_plot = case_when(...)`.</span></span>
-<span><span class="co">#&gt; Caused by warning:</span></span>
-<span><span class="co">#&gt; ! NaNs produced</span></span>
-<span><span class="co">#&gt; Warning: Removed 160 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_boxplot()`).</span></span></code></pre>
 <div class="cell-output-display">
 <div>
 <figure><p><img src="model_training_files/figure-html/indicator-boxplots-1.png" width="672"></p>
@@ -4475,11 +4422,6 @@ dispersion.</li>
 </h3>
 <p>The final figure shows the distribution of predictor variables by their true class (N, O, S) on the test set, highlighting how indicator values vary across classes.</p>
 <div class="cell">
-<pre><code><span><span class="co">#&gt; Warning: `aes_string()` was deprecated in ggplot2 3.0.0.</span></span>
-<span><span class="co">#&gt; ℹ Please use tidy evaluation idioms with `aes()`.</span></span>
-<span><span class="co">#&gt; ℹ See also `vignette("ggplot2-in-packages")` for more information.</span></span>
-<span><span class="co">#&gt; Warning: Removed 32 rows containing non-finite outside the scale range</span></span>
-<span><span class="co">#&gt; (`stat_boxplot()`).</span></span></code></pre>
 <div class="cell-output-display">
 <div>
 <figure><p><img src="model_training_files/figure-html/predictor-distributions-1.png" width="1344"></p>

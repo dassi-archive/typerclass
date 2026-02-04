@@ -1,43 +1,5 @@
 # Typerclass: Model Training and Evaluation Report
 
-    #> ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    #> ✔ dplyr     1.2.0     ✔ readr     2.1.6
-    #> ✔ forcats   1.0.1     ✔ stringr   1.6.0
-    #> ✔ ggplot2   4.0.2     ✔ tibble    3.3.1
-    #> ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-    #> ✔ purrr     1.2.1
-    #> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    #> ✖ dplyr::filter() masks stats::filter()
-    #> ✖ dplyr::lag()    masks stats::lag()
-    #> ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-    #> ── Attaching packages ────────────────────────────────────── tidymodels 1.4.1 ──
-    #>
-    #> ✔ broom        1.0.12     ✔ rsample      1.3.2
-    #> ✔ dials        1.4.2      ✔ tailor       0.1.0
-    #> ✔ infer        1.1.0      ✔ tune         2.0.1
-    #> ✔ modeldata    1.5.1      ✔ workflows    1.3.0
-    #> ✔ parsnip      1.4.1      ✔ workflowsets 1.1.1
-    #> ✔ recipes      1.3.1      ✔ yardstick    1.3.2
-    #>
-    #> ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
-    #> ✖ scales::discard() masks purrr::discard()
-    #> ✖ dplyr::filter()   masks stats::filter()
-    #> ✖ recipes::fixed()  masks stringr::fixed()
-    #> ✖ dplyr::lag()      masks stats::lag()
-    #> ✖ yardstick::spec() masks readr::spec()
-    #> ✖ recipes::step()   masks stats::step()
-    #>
-    #>
-    #> Attaching package: 'vip'
-    #>
-    #>
-    #> The following object is masked from 'package:utils':
-    #>
-    #>     vi
-    #>
-    #>
-    #> here() starts at /home/runner/work/typerclass/typerclass
-
 ## Introduction
 
 This document presents the model training and evaluation process carried
@@ -110,15 +72,6 @@ missing values. The `ranger` package can handle missing values by
 default; preliminary tests also showed that imputation did not improve
 model performance.
 
-    #> Rows: 1167 Columns: 18
-    #> ── Column specification ────────────────────────────────────────────────────────
-    #> Delimiter: ","
-    #> chr  (3): variable, dataset, type
-    #> dbl (15): n_unique_values, std_dev, max_relative_frequency, norm_entropy, mi...
-    #>
-    #> ℹ Use `spec()` to retrieve the full column specification for this data.
-    #> ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
-
 | Overview of Indicators and Missing Values |     |
 |-------------------------------------------|-----|
 | Indicator                                 | NAs |
@@ -150,13 +103,6 @@ To improve readability, a log transformation (log10 with +1) was applied
 to a subset of indicators with very different scales or heavy tails. The
 remaining panels are shown on the original scale so that comparably
 scaled indicators can be interpreted directly.
-
-    #> Warning: There was 1 warning in `mutate()`.
-    #> ℹ In argument: `value_plot = case_when(...)`.
-    #> Caused by warning:
-    #> ! NaNs produced
-    #> Warning: Removed 160 rows containing non-finite outside the scale range
-    #> (`stat_boxplot()`).
 
 ![](model_training_files/figure-html/indicator-boxplots-1.png)
 
@@ -318,11 +264,5 @@ rather than an absolute measure of effect.
 The final figure shows the distribution of predictor variables by their
 true class (N, O, S) on the test set, highlighting how indicator values
 vary across classes.
-
-    #> Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
-    #> ℹ Please use tidy evaluation idioms with `aes()`.
-    #> ℹ See also `vignette("ggplot2-in-packages")` for more information.
-    #> Warning: Removed 32 rows containing non-finite outside the scale range
-    #> (`stat_boxplot()`).
 
 ![](model_training_files/figure-html/predictor-distributions-1.png)
