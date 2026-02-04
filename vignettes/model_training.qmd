@@ -11,6 +11,7 @@ knitr:
 execute: 
   cache: true
   cache-path: _cache
+  echo: false
 ---
 
 ```{r setup-libraries, cache=FALSE}
