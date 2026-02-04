@@ -4,14 +4,17 @@
 \name{typerclass-package}
 \alias{typerclass}
 \alias{typerclass-package}
-\title{typerclass: What the Package Does (One Line, Title Case)}
+\title{typerclass: Predicts Types of Variables}
 \description{
-What the package does (one paragraph).
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
+Predicts variable types (nominal, ordinal, scale) from empirical distributions and observed values. Provides probabilistic class estimates for numeric variables and deterministic nominal classification for non-numeric types. Includes sample survey data and labels for demonstration.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://github.com/dassi-archive/typerclass}
+  \item \url{https://dassi-archive.github.io/typerclass/}
   \item Report bugs at \url{https://github.com/dassi-archive/typerclass/issues}
 }
 

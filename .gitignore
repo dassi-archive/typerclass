@@ -18,3 +18,7 @@ data-raw/helpers_report.R
 data-raw/metrics_report.R
 data-raw/model_training_report_nosemantic.qmd
 docs
+
+**/*.quarto_ipynb
+inst/doc
+**/.quarto/

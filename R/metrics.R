@@ -104,11 +104,6 @@ compute_max_value <- function(var, var_name) {
   max(non_na)
 }
 
-# Is Character Variable ------------------------------------------------------
-compute_is_character <- function(var, var_name) {
-  is.character(var)
-}
-
 
 # Shannon Entropy ------------------------------------------------------------
 compute_shannon_entropy <- function(var, var_name) {

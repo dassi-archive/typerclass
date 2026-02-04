@@ -12,7 +12,6 @@ select_metrics <- function() {
     "min_value",
     "max_value",
     "range_value",
-    "is_character",
     "shannon_entropy",
     "simpson_index",
     "skewness_probs",
@@ -121,11 +120,11 @@ predict_type <- function(data) {
 
   # ---- Compute numeric variable-level metrics ----
   if (length(dt_lst$numeric) != 0) {
-    # print(dt_lst$numeric)
     metrics <- dataset_metrics(data[, dt_lst$numeric])
     if (!"dataset" %in% names(metrics)) {
       metrics$dataset <- "dataset"
     }
+    rf_final_fit <- get("rf_final_fit", envir = asNamespace("typerclass"))
     preds_class <- as_tibble(predict(rf_final_fit, metrics))
 
     # ---- Probability predictions ----

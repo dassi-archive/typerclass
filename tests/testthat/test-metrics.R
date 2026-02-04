@@ -196,18 +196,6 @@ test_that("compute_max_value works", {
   )
 })
 
-
-test_that("compute_is_character works", {
-  expect_true(compute_is_character(var_char_simple))
-  expect_true(compute_is_character(var_char_with_na))
-  expect_true(compute_is_character(var_char_empty))
-  expect_false(compute_is_character(var_numeric))
-  expect_false(compute_is_character(var_numeric_with_na))
-  expect_false(compute_is_character(var_numeric_all_equal))
-  expect_false(compute_is_character(var_numeric_only_na))
-  expect_false(compute_is_character(var_logical))
-})
-
 test_that("compute_skewness_probs works", {
   expect_equal(compute_skewness_probs(var_numeric, var_name = "var_numeric"), {
     counts <- table(var_numeric)
