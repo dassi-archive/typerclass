@@ -184,3 +184,9 @@ documentation before using them for analysis.
 - [`predict_type()`](https://dassi-archive.github.io/typerclass/reference/predict_type.md)
   : Predict measurement types for dataset variables
 
+# Articles
+
+### All vignettes
+
+- [Typerclass: Model Training and Evaluation
+  Report](https://dassi-archive.github.io/typerclass/articles/model_training.md):
