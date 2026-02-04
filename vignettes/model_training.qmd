@@ -10,8 +10,9 @@ knitr:
     comment: '#>'
 execute: 
   cache: true
-  cache-path: _cache
   echo: false
+  warning: false
+  message: false
 ---
 
 ```{r setup-libraries, cache=FALSE}
