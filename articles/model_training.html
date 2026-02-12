@@ -2889,15 +2889,15 @@ dispersion.</li>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="model">XGB_tuned</td>
-<td class="gt_row gt_right" headers="truthN_predN">87.8</td>
-<td class="gt_row gt_right" headers="truthN_predO">14.3</td>
-<td class="gt_row gt_right" headers="truthN_predS">8.7</td>
-<td class="gt_row gt_right" headers="truthO_predN">7.3</td>
-<td class="gt_row gt_right" headers="truthO_predO">71.4</td>
-<td class="gt_row gt_right" headers="truthO_predS">17.4</td>
-<td class="gt_row gt_right" headers="truthS_predN">4.9</td>
-<td class="gt_row gt_right" headers="truthS_predO">14.3</td>
-<td class="gt_row gt_right" headers="truthS_predS">73.91304</td>
+<td class="gt_row gt_right" headers="truthN_predN">84.3</td>
+<td class="gt_row gt_right" headers="truthN_predO">10.3</td>
+<td class="gt_row gt_right" headers="truthN_predS">5.3</td>
+<td class="gt_row gt_right" headers="truthO_predN">7.9</td>
+<td class="gt_row gt_right" headers="truthO_predO">76.9</td>
+<td class="gt_row gt_right" headers="truthO_predS">15.8</td>
+<td class="gt_row gt_right" headers="truthS_predN">7.9</td>
+<td class="gt_row gt_right" headers="truthS_predO">12.8</td>
+<td class="gt_row gt_right" headers="truthS_predS">78.94737</td>
 </tr>
 </tbody>
 </table>
@@ -3383,8 +3383,8 @@ dispersion.</li>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="model">XGB_tuned</td>
-<td class="gt_row gt_left" headers="accuracy">0.81</td>
-<td class="gt_row gt_left" headers="bal_accuracy">0.83</td>
+<td class="gt_row gt_left" headers="accuracy">0.82</td>
+<td class="gt_row gt_left" headers="bal_accuracy">0.82</td>
 <td class="gt_row gt_left" headers="f_meas">0.77</td>
 <td class="gt_row gt_left" headers="kap">0.68</td>
 <td class="gt_row gt_left" headers="roc_auc">0.90</td>
@@ -4373,39 +4373,39 @@ dispersion.</li>
 <tr class="odd">
 <td class="gt_row gt_center" style="text-align: left;" headers="type">N</td>
 <td class="gt_row gt_center" style="text-align: left;" headers=".pred_class">O</td>
-<td class="gt_row gt_right" style="text-align: left;" headers="n">6</td>
+<td class="gt_row gt_right" style="text-align: left;" headers="n">4</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" style="text-align: left;" headers="type">N</td>
 <td class="gt_row gt_center" style="text-align: left;" headers=".pred_class">S</td>
-<td class="gt_row gt_right" style="text-align: left;" headers="n">2</td>
+<td class="gt_row gt_right" style="text-align: left;" headers="n">1</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" style="text-align: left;" headers="type">O</td>
 <td class="gt_row gt_center" style="text-align: left;" headers=".pred_class">N</td>
-<td class="gt_row gt_right" style="text-align: left;" headers="n">6</td>
+<td class="gt_row gt_right" style="text-align: left;" headers="n">7</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" style="text-align: left;" headers="type">O</td>
 <td class="gt_row gt_center" style="text-align: left;" headers=".pred_class">S</td>
-<td class="gt_row gt_right" style="text-align: left;" headers="n">4</td>
+<td class="gt_row gt_right" style="text-align: left;" headers="n">3</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_center" style="text-align: left;" headers="type">S</td>
 <td class="gt_row gt_center" style="text-align: left;" headers=".pred_class">N</td>
-<td class="gt_row gt_right" style="text-align: left;" headers="n">4</td>
+<td class="gt_row gt_right" style="text-align: left;" headers="n">7</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_center" style="text-align: left;" headers="type">S</td>
 <td class="gt_row gt_center" style="text-align: left;" headers=".pred_class">O</td>
-<td class="gt_row gt_right" style="text-align: left;" headers="n">6</td>
+<td class="gt_row gt_right" style="text-align: left;" headers="n">5</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
-<p>For RF, the most frequent error is N → O (7 cases, 23 total misclassifications). For XGBoost, the top confusion is N → O (6 cases, 28 total). These summaries highlight whether errors cluster between adjacent classes or are more diffuse; fewer and more concentrated errors generally indicate a more reliable model.</p>
+<p>For RF, the most frequent error is N → O (7 cases, 23 total misclassifications). For XGBoost, the top confusion is O → N (7 cases, 27 total). These summaries highlight whether errors cluster between adjacent classes or are more diffuse; fewer and more concentrated errors generally indicate a more reliable model.</p>
 <p><strong>Consistent with the overall performance metrics, Random Forest remains the best-performing model and will be used for the final classifier.</strong></p>
 </section><section class="level3"><h3 id="variable-importance-scores">Variable importance scores<a class="anchor" aria-label="anchor" href="#variable-importance-scores"></a>
 </h3>

@@ -188,7 +188,7 @@ represent per-class recall.
 |---------------------------------------------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|-----------------|
 | Model                                             | True N → Pred N | True N → Pred O | True N → Pred S | True O → Pred N | True O → Pred O | True O → Pred S | True S → Pred N | True S → Pred O | True S → Pred S |
 | RF_tuned                                          | 91.1            | 15.6            | 4.3             | 5.1             | 73.3            | 13.0            | 3.8             | 11.1            | 82.60870        |
-| XGB_tuned                                         | 87.8            | 14.3            | 8.7             | 7.3             | 71.4            | 17.4            | 4.9             | 14.3            | 73.91304        |
+| XGB_tuned                                         | 84.3            | 10.3            | 5.3             | 7.9             | 76.9            | 15.8            | 7.9             | 12.8            | 78.94737        |
 
 ### Performance metrics
 
@@ -202,7 +202,7 @@ class‑balanced performance.
 |--------------------------|----------|--------------|----------|----------|----------|
 | model                    | accuracy | bal_accuracy | f_meas   | kap      | roc_auc  |
 | RF_tuned                 | 0.84     | 0.86         | 0.81     | 0.74     | 0.93     |
-| XGB_tuned                | 0.81     | 0.83         | 0.77     | 0.68     | 0.90     |
+| XGB_tuned                | 0.82     | 0.82         | 0.77     | 0.68     | 0.90     |
 | Winner                   | RF_tuned | RF_tuned     | RF_tuned | RF_tuned | RF_tuned |
 
 Accuracy is the overall proportion of correct predictions, while
@@ -231,16 +231,16 @@ patterns for each model.
 | Misclassification Summary (Test Set) — XGBoost |                 |       |
 |:-----------------------------------------------|:----------------|:------|
 | True class                                     | Predicted class | Count |
-| N                                              | O               | 6     |
-| N                                              | S               | 2     |
-| O                                              | N               | 6     |
-| O                                              | S               | 4     |
-| S                                              | N               | 4     |
-| S                                              | O               | 6     |
+| N                                              | O               | 4     |
+| N                                              | S               | 1     |
+| O                                              | N               | 7     |
+| O                                              | S               | 3     |
+| S                                              | N               | 7     |
+| S                                              | O               | 5     |
 
 For RF, the most frequent error is N → O (7 cases, 23 total
-misclassifications). For XGBoost, the top confusion is N → O (6 cases,
-28 total). These summaries highlight whether errors cluster between
+misclassifications). For XGBoost, the top confusion is O → N (7 cases,
+27 total). These summaries highlight whether errors cluster between
 adjacent classes or are more diffuse; fewer and more concentrated errors
 generally indicate a more reliable model.
 
