@@ -31,6 +31,7 @@ Imports:
     dplyr,
     jsonlite,
     purrr,
+    ranger,
     rlang,
     stats,
     workflows
@@ -47,7 +48,6 @@ Suggests:
     parsnip,
     patchwork,
     quarto,
-    ranger,
     rmarkdown,
     testthat (>= 3.0.0),
     tidymodels,
