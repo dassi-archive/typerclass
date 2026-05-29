@@ -4,6 +4,7 @@
 ## usethis namespace: start
 #' @import workflows
 #' @importFrom cli cli_abort
+#' @importFrom cli cli_warn
 #' @importFrom dplyr as_tibble
 #' @importFrom dplyr bind_cols
 #' @importFrom dplyr everything
@@ -15,6 +16,7 @@
 #' @importFrom purrr map_dfr
 #' @importFrom purrr map_lgl
 #' @importFrom purrr pmap
+#' @importFrom ranger ranger
 #' @importFrom rlang .data
 #' @importFrom stats predict
 #' @importFrom stats sd

@@ -4,10 +4,17 @@
 \alias{predict_type}
 \title{Predict measurement types for dataset variables}
 \usage{
-predict_type(data)
+predict_type(data, missing = NULL)
 }
 \arguments{
 \item{data}{A data frame of variables to classify.}
+
+\item{missing}{An optional specification of missing values created by
+\code{\link[=set_missing]{set_missing()}}. Values declared as missing are converted to \code{NA} before
+computing the distributional metrics, excluding them from the analysis.
+Can specify global missing values (applied to all numeric/factor variables)
+or per-variable missing values. Default is \code{NULL} (no additional missing
+values beyond standard \code{NA}).}
 }
 \value{
 A tibble with one row per input variable and the following columns:
@@ -31,6 +38,11 @@ and unsupported types receive empty predictions.
 \details{
 Factors are coerced to numeric and included with other numeric variables.
 The model object \code{rf_final_fit} is loaded with the package.
+
+When a \code{missing} specification is provided, the declared missing values are
+converted to \code{NA} \strong{before} the factor-to-numeric conversion and the metric
+computation. This means that for factor variables, the values are matched
+against the factor level labels (not the internal integer codes).
 }
 \examples{
 \dontrun{
@@ -39,5 +51,8 @@ df <- tibble(
   sex = c("M", "F", "F")
 )
 predict_type(df)
+
+# Exclude survey missing codes
+predict_type(df, missing = set_missing(all = c(98, 99)))
 }
 }

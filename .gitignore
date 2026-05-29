@@ -22,3 +22,9 @@ docs
 **/*.quarto_ipynb
 inst/doc
 **/.quarto/
+
+# R CMD check output
+..Rcheck/
+
+# Local playground scripts
+_playground/
